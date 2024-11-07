@@ -40,11 +40,6 @@ function LandingPage() {
         }
     }
 
-    // const registerUser = async () => {
-    //     const res = await axios.post(`${beBaseUrl}/register`, formData)
-    //     return res
-    // }
-
     return (
         <>
             <Box p={6} bg="pink.400" textAlign="center">

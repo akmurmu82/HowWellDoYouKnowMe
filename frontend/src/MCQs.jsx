@@ -27,7 +27,6 @@ export default function MCQs() {
         const fetchAllQuestions = async () => {
             const res = await axios.get(`${beBaseUrl}/questions`)
             setQuestions(res.data)
-            console.log(res.data)
         }
         fetchAllQuestions()
         setCurrentUser(JSON.parse(localStorage.getItem("currentUser")))
@@ -36,30 +35,36 @@ export default function MCQs() {
     const handleSubmit = useCallback(async () => {
         setIsActive(false)
 
+        // Score calculation
         let newScore = 0
         questions.forEach((question) => {
             if (selectedAnswers[question._id] === question.correctAnswer) {
                 newScore++
+                console.log("correct", newScore)
+            } else {
+                console.log("incorrect")
             }
         })
 
-        currentUser = { ...currentUser, score: newScore, timeTaken: 90 - timer }
-        localStorage.setItem("currentUser", JSON.stringify(currentUser))
+        const updatedUser = { ...currentUser, score: newScore, timeTaken: 90 - timer }
+        console.log("updatedUser:", updatedUser)
 
-
+        setCurrentUser(updatedUser)
         setScore(newScore)
         setQuizCompleted(true)
 
-        // Decrement credits by 1
-        const updatedCredits = currentUser.credits - 1;
-        currentUser.credits = updatedCredits;
+        localStorage.setItem("currentUser", JSON.stringify(updatedUser))
 
-        console.log("user to update:", currentUser)
+        // Decrement credits by 1
+        const updatedCredits = updatedUser.credits - 1;
+        updatedUser.credits = updatedCredits;
+
+        console.log("user to update:", updatedUser)
 
         try {
             let res = await axios.patch(
                 `${beBaseUrl}/update`,
-                currentUser
+                updatedUser
             );
             console.log("User credits updated successfully.", res.data.user, currentUser);
         } catch (error) {
@@ -67,7 +72,7 @@ export default function MCQs() {
         }
 
         navigate("/leaderboard")
-    }, [selectedAnswers])
+    }, [selectedAnswers, currentUser, navigate, questions, timer])
 
     // Timer
     useEffect(() => {

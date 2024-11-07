@@ -26,16 +26,16 @@ const LeaderBoard = () => {
         fetchAllPlayers()
     }, [])
 
-    useEffect(() => {
-        const sortedPlayers = players.sort((a, b) => {
-            if (b.score === a.score) return a.timeTaken - b.timeTaken;
-            return b.score - a.score;
-        });
+    // useEffect(() => {
+    //     const sortedPlayers = players.sort((a, b) => {
+    //         if (b.score === a.score) return a.timeTaken - b.timeTaken;
+    //         return b.score - a.score;
+    //     });
 
-        console.log("sortedPlayers:", sortedPlayers)
+    //     console.log("sortedPlayers:", sortedPlayers)
 
-        setPlayers(sortedPlayers);
-    }, [players, setPlayers]);
+    //     setPlayers(sortedPlayers);
+    // }, [players, setPlayers]);
 
     const handleShareOnWhatsApp = () => {
         const message = `Check out my achievement! I scored ${currentUser.score} with a time of ${currentUser.timeTaken} seconds on the LeaderBoard.`;

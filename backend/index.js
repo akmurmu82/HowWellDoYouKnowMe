@@ -72,7 +72,7 @@ app.get('/questions', async (req, res) => {
 // Route to get all questions
 app.get('/players', async (req, res) => {
     try {
-        const players = await User.find(); // Fetch all players from the database
+        const players = await User.find().sort({ score: -1 }); // Fetch all players from the database
         res.status(200).json(players); // Send back the players as a JSON response
     } catch (error) {
         console.error('Error fetching players:', error);
