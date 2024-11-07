@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Box, VStack, Button, Text, Container, Heading, Image, HStack, Spacer } from '@chakra-ui/react';
+import { Box, VStack, Button, Text, Container, Image, HStack } from '@chakra-ui/react';
 import Certificate from './Certificate';
 import axios from 'axios';
+import Navbar from './Navbar';
 
 const LeaderBoard = () => {
+    const [isLoading, setLoading] = useState(false);
     const [players, setPlayers] = useState([]);
     const [credits, setCredits] = useState(3);
     const [showCertificate, setShowCertificate] = useState(false);
@@ -13,6 +15,7 @@ const LeaderBoard = () => {
 
     useEffect(() => {
         const fetchAllPlayers = async () => {
+            setLoading(true)
             try {
                 let res = await axios.get(`${beBaseUrl}/players`);
                 console.log("Players fetched successfully.", res, res.data);
@@ -21,6 +24,8 @@ const LeaderBoard = () => {
                 }
             } catch (error) {
                 console.error("Error fetching players!", error);
+            } finally {
+                setLoading(false)
             }
         }
         fetchAllPlayers()
@@ -34,22 +39,16 @@ const LeaderBoard = () => {
 
     return (
         <Container maxW="container.md" py={8}>
-            <HStack bg={'black'} mx={"auto"} w={'100%'} justifyContent={"space-between"} position={"fixed"} zIndex={9} top={0} left={0} textAlign="center" p={4}>
-                <Heading size="md" textAlign="center">
-                    LeaderBoard
-                </Heading>
-                <HStack>
-                    <Text>{currentUser.name}</Text>
-                    <Image w={10} borderRadius={"50%"} src={currentUser.profilePic} />
-                </HStack>
-            </HStack>
+
+            <Navbar title="Leaderboard" currentUser={currentUser} />
             <VStack spacing={4} align="stretch" borderWidth={1} borderRadius="lg" mt={10} p={4} overflowY="auto" h={"600px"}>
 
-                {players.length === 0 ? (
-                    <Text>No players to display</Text>
-                ) : (players.map((player, index) => {
-                    console.log("Rendering player:", players);
-                    return (
+                {isLoading ? (
+                    <Text>Players ranking is loading...</Text>
+                ) :
+                    players.length === 0 ? (
+                        <Text>No players to display</Text>
+                    ) : (players.map((player, index) => (
                         <HStack
                             key={player.name}
                             p={3}
@@ -70,7 +69,7 @@ const LeaderBoard = () => {
                             </Box>
                         </HStack>
                     )
-                }))}
+                    ))}
             </VStack>
 
             <VStack spacing={2} align="stretch" mt={4} borderWidth={1} borderRadius="lg" p={4}>

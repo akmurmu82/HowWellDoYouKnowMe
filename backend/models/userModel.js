@@ -6,6 +6,7 @@ const userSchema = mongoose.Schema({
     profilePic: { type: String, default: "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png"},
     relation: { type: String, required: true, enum: ["Friend", "Cousine", "Uncle", "Aunt", "Unknown"], default: "Friend" },
     score: { type: Number, default: 0 },
+    timeTaken: { type: Number, default: 999 },
     credits: { type: Number, default: 3 },
     createdAt: { type: Date, default: Date.now }
 })

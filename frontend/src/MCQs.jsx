@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import axios from "axios"
-import { Box, VStack, Text, Button, Container, Heading, HStack, Image, Spinner } from '@chakra-ui/react'
+import { Box, VStack, Text, Button, Container, Spinner } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { Toaster, toaster } from './components/ui/toaster'
+import Navbar from './Navbar'
 
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
 // const lsUser = JSON.parse(localStorage.getItem("currentUser"))
@@ -39,7 +40,6 @@ export default function MCQs() {
             ...prev,
             [questionId]: option,
         }))
-        console.log("selectedAnswers: ", selectedAnswers, "currentUser:", currentUser)
     }
 
     const handleSubmit = useCallback(async () => {
@@ -57,7 +57,7 @@ export default function MCQs() {
         const updatedUser = { ...currentUser, score, timeTaken: 90 - timer, credits: currentUser.credits - 1 }
         console.log("updatedUser:", updatedUser)
 
-        // console.log("user to update:", updatedUser)
+        console.log("user to update:", updatedUser)
 
         try {
             await axios.patch(`${beBaseUrl}/update`, updatedUser);
@@ -80,10 +80,8 @@ export default function MCQs() {
 
     // Timer effect with auto-submit on timeout
     useEffect(() => {
-        let interval
-
         if (isActive && timer > 0) {
-            interval = setInterval(() => setTimer(prev => prev - 1), 1000)
+            const interval = setInterval(() => setTimer(prev => prev - 1), 1000)
             return () => clearInterval(interval);
         } else if (timer === 0) {
             handleSubmit()
@@ -93,7 +91,8 @@ export default function MCQs() {
     return (
         <Container maxW="container.md" mt={8}>
             <Toaster />
-            <HStack bg={'black'} mx={"auto"} w={'100%'} justifyContent={"space-between"} position={"fixed"} zIndex={9} top={0} left={0} textAlign="center" p={4}>
+            <Navbar title="MCQs" timer={timer} currentUser={currentUser} />
+            {/* <HStack bg={'black'} mx={"auto"} w={'100%'} justifyContent={"space-between"} position={"fixed"} zIndex={9} top={0} left={0} textAlign="center" p={4}>
                 <Heading size="md" textAlign="center">
                     MCQs
                 </Heading>
@@ -102,7 +101,7 @@ export default function MCQs() {
                     <Text>{currentUser.name.length > 10 ? currentUser.name.slice(0, 10) + "..." : currentUser.name}</Text>
                     <Image w={10} borderRadius={"50%"} src={currentUser.profilePic} />
                 </HStack>
-            </HStack>
+            </HStack> */}
 
             <VStack spacing={6} align="stretch" my={5} mt={20}>
                 {questions.map((question) => (
