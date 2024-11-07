@@ -24,18 +24,7 @@ const LeaderBoard = () => {
             }
         }
         fetchAllPlayers()
-    }, [])
-
-    // useEffect(() => {
-    //     const sortedPlayers = players.sort((a, b) => {
-    //         if (b.score === a.score) return a.timeTaken - b.timeTaken;
-    //         return b.score - a.score;
-    //     });
-
-    //     console.log("sortedPlayers:", sortedPlayers)
-
-    //     setPlayers(sortedPlayers);
-    // }, [players, setPlayers]);
+    }, [beBaseUrl])
 
     const handleShareOnWhatsApp = () => {
         const message = `Check out my achievement! I scored ${currentUser.score} with a time of ${currentUser.timeTaken} seconds on the LeaderBoard.`;
@@ -53,31 +42,35 @@ const LeaderBoard = () => {
                     <Text>{currentUser.name}</Text>
                     <Image w={10} borderRadius={"50%"} src={currentUser.profilePic} />
                 </HStack>
-                {/* <Spacer /> */}
             </HStack>
             <VStack spacing={4} align="stretch" borderWidth={1} borderRadius="lg" p={4} overflowY="auto" h={"600px"}>
 
-                {players.map((player, index) => (
-                    <HStack
-                        key={player.name}
-                        p={3}
-                        color={"black"}
-                        justifyContent={"space-around"}
-                        borderWidth={1}
-                        borderRadius="md"
-                        bg={index === 0 ? 'yellow.100' : 'gray.100'}
-                        textAlign="center"
-                    >
-                        <Image w={20} borderRadius={"50%"} src={player.profilePic} />
-                        <Box>
-                            <Text fontWeight="bold">
-                                {index + 1 === 1 ? '1st ' : `${index + 1}th `} {player.name}
-                            </Text>
-                            <Text>Score: {player.score}</Text>
-                            <Text>Time Taken: {player.timeTaken}s</Text>
-                        </Box>
-                    </HStack>
-                ))}
+                {players.length === 0 ? (
+                    <Text>No players to display</Text>
+                ) : (players.map((player, index) => {
+                    console.log("Rendering player:", players);
+                    return (
+                        <HStack
+                            key={player.name}
+                            p={3}
+                            color={"black"}
+                            justifyContent={"space-around"}
+                            borderWidth={1}
+                            borderRadius="md"
+                            bg={index === 0 ? 'yellow.100' : 'gray.100'}
+                            textAlign="center"
+                        >
+                            <Image w={20} borderRadius={"50%"} src={player.profilePic} />
+                            <Box>
+                                <Text fontWeight="bold">
+                                    {index + 1 === 1 ? '1st ' : `${index + 1}th `} {player.name}
+                                </Text>
+                                <Text>Score: {player.score}</Text>
+                                <Text>Time Taken: {player.timeTaken}s</Text>
+                            </Box>
+                        </HStack>
+                    )
+                }))}
             </VStack>
 
             <VStack spacing={2} align="stretch" mt={4} borderWidth={1} borderRadius="lg" p={4}>
