@@ -1,16 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import axios from "axios"
-import { Box, VStack, Text, Button, Container, Heading, HStack, Image, Spacer } from '@chakra-ui/react'
+import { Box, VStack, Text, Button, Container, Heading, HStack, Image, Spacer, Spinner } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
 
 export default function MCQs() {
+    const [isLoading, setLoading] = useState(false)
     const [selectedAnswers, setSelectedAnswers] = useState({})
     const [questions, setQuestions] = useState([])
     let [currentUser, setCurrentUser] = useState({})
-    const [quizCompleted, setQuizCompleted] = useState(false)
-    const [score, setScore] = useState(0)
     const [isActive, setIsActive] = useState(true)
     const navigate = useNavigate()
     const [timer, setTimer] = useState(90) // 60 seconds timer
@@ -50,8 +49,6 @@ export default function MCQs() {
         console.log("updatedUser:", updatedUser)
 
         setCurrentUser(updatedUser)
-        setScore(newScore)
-        setQuizCompleted(true)
 
         localStorage.setItem("currentUser", JSON.stringify(updatedUser))
 
@@ -62,12 +59,17 @@ export default function MCQs() {
         console.log("user to update:", updatedUser)
 
         try {
+            setLoading(true)
             let res = await axios.patch(
                 `${beBaseUrl}/update`,
                 updatedUser
             );
-            console.log("User credits updated successfully.", res.data.user, currentUser);
+            if (res.status === 200) {
+                setLoading(false)
+                console.log("User credits updated successfully.");
+            }
         } catch (error) {
+            setLoading(true)
             console.error("Error updating user credits:", error);
         }
 
@@ -136,12 +138,13 @@ export default function MCQs() {
                     colorScheme="blue"
                     size="lg"
                     onClick={handleSubmit}
-                    isDisabled={!isActive}
+                    disabled={isLoading}
                 >
-                    Submit
+                    {isLoading && <Spinner size="md" />}
+                    Bas, Itna hi pata hai
                 </Button>
 
-                {quizCompleted && (
+                {/* {quizCompleted && (
                     <Box
                         p={6}
                         borderWidth={1}
@@ -157,7 +160,7 @@ export default function MCQs() {
                             Your score: {score}/{questions.length}
                         </Text>
                     </Box>
-                )}
+                )} */}
 
             </VStack>
         </Container>

@@ -1,4 +1,4 @@
-import { Box, Button, Center, Container, Fieldset, Heading, Image, Input, Stack, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Center, Container, Fieldset, Heading, Image, Input, Spinner, Stack, Text, VStack } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Field } from './components/ui/field';
@@ -10,6 +10,7 @@ const beBaseUrl = import.meta.env.VITE_BE_BASE_URL;
 
 function LandingPage() {
     const navigate = useNavigate()
+    const [isLoading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({ name: "", email: "", relation: "" })
     const [formSubmitted, setFormSubmitted] = useState(false)
@@ -20,10 +21,12 @@ function LandingPage() {
     const handleSubmit = async () => {
         setFormSubmitted(true)
         console.log(formData)
-        try{
+        try {
+            setLoading(true)
             const res = await axios.post(`${beBaseUrl}/register`, formData)
             // console.log(res)
             if (res.status == 201) {
+                setLoading(false)
                 console.log(res.data)
                 localStorage.setItem("currentUser", JSON.stringify(res.data.user))
                 toaster.create({
@@ -35,7 +38,8 @@ function LandingPage() {
                     },
                 })
             }
-        } catch(error) {
+        } catch (error) {
+            setLoading(false)
             console.log(error)
         }
     }
@@ -100,6 +104,7 @@ function LandingPage() {
                                     </Field>
                                 </Fieldset.Content>
                                 <Button type="submit" onClick={handleSubmit} mt={4} bg="pink">
+                                    {isLoading && <Spinner size="md" />}
                                     Submit
                                 </Button>
                             </Fieldset.Root>
