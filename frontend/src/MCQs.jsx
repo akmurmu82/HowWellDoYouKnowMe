@@ -95,13 +95,16 @@ export default function MCQs() {
 
     return (
         <Container maxW="container.md" mt={8}>
-            <HStack bg={'black'} mx={"auto"} w={'100%'} position={"fixed"} zIndex={9} top={0} left={0} textAlign="center" p={4}>
-                <HStack>
-                    <Image w={10} borderRadius={"50%"} src={currentUser.profilePic} />
-                    <Text>{currentUser.name}</Text>
-                </HStack>
-                <Spacer />
+            <HStack bg={'black'} mx={"auto"} w={'100%'} justifyContent={"space-between"} position={"fixed"} zIndex={9} top={0} left={0} textAlign="center" p={4}>
+                <Heading size="md" textAlign="center">
+                    MCQs
+                </Heading>
                 <Heading size="md">Timer: {String(timer).padStart(2, '0')}</Heading>
+
+                <HStack>
+                    <Text>{currentUser.name}</Text>
+                    <Image w={10} borderRadius={"50%"} src={currentUser.profilePic} />
+                </HStack>
             </HStack>
             <VStack spacing={6} align="stretch" my={5} mt={20}>
                 {questions.map((question) => (

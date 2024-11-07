@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, VStack, Button, Text, Container, Heading, Image, HStack } from '@chakra-ui/react';
+import { Box, VStack, Button, Text, Container, Heading, Image, HStack, Spacer } from '@chakra-ui/react';
 import Certificate from './Certificate';
 import axios from 'axios';
 
@@ -45,9 +45,16 @@ const LeaderBoard = () => {
 
     return (
         <Container maxW="container.md" py={8}>
-            <Heading size="md" mb={4} textAlign="center">
-                LeaderBoard
-            </Heading>
+            <HStack bg={'black'} mx={"auto"} w={'100%'} justifyContent={"space-between"} position={"fixed"} zIndex={9} top={0} left={0} textAlign="center" p={4}>
+                <Heading size="md" textAlign="center">
+                    LeaderBoard
+                </Heading>
+                <HStack>
+                    <Text>{currentUser.name}</Text>
+                    <Image w={10} borderRadius={"50%"} src={currentUser.profilePic} />
+                </HStack>
+                {/* <Spacer /> */}
+            </HStack>
             <VStack spacing={4} align="stretch" borderWidth={1} borderRadius="lg" p={4} overflowY="auto" h={"600px"}>
 
                 {players.map((player, index) => (
