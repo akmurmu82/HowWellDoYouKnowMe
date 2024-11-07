@@ -1,5 +1,3 @@
-"use client"
-
 import { Box, Button, Center, Container, Fieldset, Heading, Image, Input, Stack, Text, VStack } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -7,9 +5,11 @@ import { Field } from './components/ui/field';
 import heroImage from './assets/hero-image.gif';
 import { useState } from 'react';
 import { Toaster, toaster } from "./components/ui/toaster"
+import { useNavigate } from 'react-router-dom';
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL;
 
 function LandingPage() {
+    const navigate = useNavigate()
 
     const [formData, setFormData] = useState({ name: "", email: "", relation: "" })
     const [formSubmitted, setFormSubmitted] = useState(false)
@@ -20,42 +20,30 @@ function LandingPage() {
     const handleSubmit = async () => {
         setFormSubmitted(true)
         console.log(formData)
-        const res = await registerUser()
-        // console.log("res:", res)
-        if (res.statusText == "OK") {
-            console.log(res.data)
-            toaster.create({
-                title: "Ho gya",
-                description: "Thanks for registering.",
-                duration: 2000,
-            })
+        try{
+            const res = await axios.post(`${beBaseUrl}/register`, formData)
+            // console.log(res)
+            if (res.status == 201) {
+                console.log(res.data)
+                localStorage.setItem("currentUser", JSON.stringify(res.data.user))
+                toaster.create({
+                    title: "Ho gya",
+                    description: "Thanks for registering.",
+                    duration: 2000,
+                    onStatusChange({ status }) {
+                        if (status === "unmounted") navigate("/mcqs")
+                    },
+                })
+            }
+        } catch(error) {
+            console.log(error)
         }
     }
 
-    // const handleSubmit = async () => {
-    //     setFormSubmitted(true);
-
-    //     // Create a promise for the toaster
-    //     const promise =await registerUser();
-    //     console.log(promise)
-
-    //     toaster.promise(promise, {
-    //         success: {
-    //             title: "Successfully uploaded!",
-    //             description: "Looks great",
-    //         },
-    //         error: {
-    //             title: "Upload failed",
-    //             description: "Something wrong with the upload",
-    //         },
-    //         loading: { title: "Uploading...", description: "Please wait" },
-    //     })
-    // };
-
-    const registerUser = async () => {
-        const res = await axios.post(`${beBaseUrl}/register`, formData)
-        return res
-    }
+    // const registerUser = async () => {
+    //     const res = await axios.post(`${beBaseUrl}/register`, formData)
+    //     return res
+    // }
 
     return (
         <>

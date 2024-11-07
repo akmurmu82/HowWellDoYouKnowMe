@@ -2,6 +2,7 @@ const express = require("express")
 const cors = require("cors")
 const User = require("./models/userModel")
 const connectToDb = require("./config/db")
+const Question = require("./models/questionModel")
 require("dotenv").config()
 
 const port = process.env.PORT
@@ -26,9 +27,9 @@ app.post("/register", async (req, res) => {
         if (!existingUser) {
             const newUser = new User({ name, email, relation })
             await newUser.save()
-            res.status(201).json({ message: "User created", newUser })
+            res.status(201).json({ message: "User created", user: newUser })
         } else {
-            res.json({ message: "User already exists.", existingUser })
+            res.json({ message: "User already exists.", user: existingUser })
         }
 
     } catch (error) {
@@ -41,12 +42,14 @@ app.post("/register", async (req, res) => {
 app.patch("/update", async (req, res) => {
     try {
         const { name, ...updates } = req.body
+        console.log("res.body:", res.body)
 
         const existingUser = await User.findOneAndUpdate({ name }, updates, { new: true, runValidators: true })
         if (!existingUser) {
             res.status(404).json({ message: "User not found!" })
         } else {
-            res.status(200).json({ existingUser })
+            console.log("existingUser:", existingUser)
+            res.status(200).json({ message: "User updated", user: existingUser })
         }
 
     } catch (error) {
@@ -54,6 +57,28 @@ app.patch("/update", async (req, res) => {
         console.log(error)
     }
 })
+
+// Route to get all questions
+app.get('/questions', async (req, res) => {
+    try {
+        const questions = await Question.find(); // Fetch all questions from the database
+        res.status(200).json(questions); // Send back the questions as a JSON response
+    } catch (error) {
+        console.error('Error fetching questions:', error);
+        res.status(500).json({ message: 'Internal server error' }); // Handle errors
+    }
+});
+
+// Route to get all questions
+app.get('/players', async (req, res) => {
+    try {
+        const players = await User.find(); // Fetch all players from the database
+        res.status(200).json(players); // Send back the players as a JSON response
+    } catch (error) {
+        console.error('Error fetching players:', error);
+        res.status(500).json({ message: 'Internal server error' }); // Handle errors
+    }
+});
 
 app.listen(port, async () => {
     try {
