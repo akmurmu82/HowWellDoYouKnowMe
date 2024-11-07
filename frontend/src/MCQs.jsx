@@ -4,15 +4,17 @@ import { Box, VStack, Text, Button, Container, Heading, HStack, Image, Spacer, S
 import { useNavigate } from 'react-router-dom'
 
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
+const lsUser = JSON.parse(localStorage.getItem("currentUser"))
 
 export default function MCQs() {
     const [isLoading, setLoading] = useState(false)
     const [selectedAnswers, setSelectedAnswers] = useState({})
     const [questions, setQuestions] = useState([])
-    let [currentUser, setCurrentUser] = useState({})
+    let [currentUser, setCurrentUser] = useState(lsUser)
     const [isActive, setIsActive] = useState(true)
     const navigate = useNavigate()
     const [timer, setTimer] = useState(90) // 60 seconds timer
+    console.log(currentUser)
 
     const handleAnswerClick = (questionId, option) => {
         setSelectedAnswers(prev => ({
@@ -28,7 +30,6 @@ export default function MCQs() {
             setQuestions(res.data)
         }
         fetchAllQuestions()
-        setCurrentUser(JSON.parse(localStorage.getItem("currentUser")))
     }, [])
 
     const handleSubmit = useCallback(async () => {
@@ -102,7 +103,7 @@ export default function MCQs() {
                 <Heading size="md">Timer: {String(timer).padStart(2, '0')}</Heading>
 
                 <HStack>
-                    <Text>{currentUser.name}</Text>
+                    <Text>{currentUser.name.length > 10 ? currentUser.name.slice(0, 10) + "..." : currentUser.name}</Text>
                     <Image w={10} borderRadius={"50%"} src={currentUser.profilePic} />
                 </HStack>
             </HStack>
