@@ -16,9 +16,9 @@ const LeaderBoard = () => {
             try {
                 let res = await axios.get(`${beBaseUrl}/players`);
                 console.log("Players fetched successfully.", res.data);
-                if (res.statusText == "OK") {
-                    setPlayers(res.data)
-                }
+                setPlayers(res.data)
+                // if (res.statusText == "OK") {
+                // }
             } catch (error) {
                 console.error("Error fetching players!", error);
             }
