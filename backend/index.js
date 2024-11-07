@@ -4,6 +4,18 @@ const User = require("./models/userModel")
 const connectToDb = require("./config/db")
 const Question = require("./models/questionModel")
 require("dotenv").config()
+const cron = require('node-cron');
+
+// Resetting credits of all the users back to 3 at midnight
+cron.schedule('*/2 * * * *', async () => {
+    try {
+        await Player.updateMany({}, { $set: { credits: 3 } });
+        console.log("Credits reset to 3 for all users");
+    } catch (error) {
+        console.error("Error resetting credits:", error);
+    }
+});
+
 
 const port = process.env.PORT
 

@@ -6,9 +6,13 @@ import heroImage from './assets/hero-image.gif';
 import { useState } from 'react';
 import { Toaster, toaster } from "./components/ui/toaster"
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL;
 
 function LandingPage() {
+    let currentUser = JSON.parse(localStorage.getItem("currentUser")) || { name: "Welcome" }
+    console.log(currentUser)
+
     const navigate = useNavigate()
     const [isLoading, setLoading] = useState(false)
 
@@ -46,15 +50,10 @@ function LandingPage() {
 
     return (
         <>
-            <Box p={6} bg="pink.400" textAlign="center">
-                <Heading color="white" fontSize="3xl">
-                    HowWellDoYouKnowMe
-                </Heading>
-            </Box>
+            <Navbar title="MCQs" currentUser={currentUser} />
             <Toaster />
-
             {/* Content Section */}
-            <Container maxW="container.md" mt={8} p={5} bg="white" borderRadius="lg" boxShadow="md">
+            <Container maxW="container.md" mt={20} p={5} bg="white" borderRadius="lg" boxShadow="md">
                 <VStack spacing={4} align="center">
                     {/* Hero Image */}
                     <Image

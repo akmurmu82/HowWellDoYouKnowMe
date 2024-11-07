@@ -1,4 +1,4 @@
-import { Button, Heading, HStack, Image, Text } from '@chakra-ui/react';
+import { Button, Heading, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import {
     DrawerActionTrigger,
@@ -35,8 +35,11 @@ function Navbar({ title, timer, currentUser }) {
                         </DrawerHeader>
                         <DrawerBody>
                             <p>Agar achcha laga to WhatsApp pe bata dena.😉</p>
-                            <Button w={"90%"} variant="surface" onClick={() => navigate("/leaderboard")}>LEADERBOARD</Button>
-                            <Button w={"90%"} variant="surface" onClick={() => navigate("/mcqs")}>MCQs</Button>
+                            <VStack gap={2} textAlign={'left'} mt={2} alignItems={"flex-start"} >
+                                <Button w={"90%"} variant="surface" onClick={() => navigate("/")}>Home</Button>
+                                <Button w={"90%"} variant="surface" onClick={() => navigate("/leaderboard")}>LEADERBOARD</Button>
+                                <Button w={"90%"} variant="surface" onClick={() => navigate("/mcqs")}>MCQs</Button>
+                            </VStack>
                         </DrawerBody>
                         <DrawerFooter>
                             <DrawerActionTrigger asChild>

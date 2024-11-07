@@ -3,11 +3,23 @@ import { Box, VStack, Button, Text, Container, Image, HStack } from '@chakra-ui/
 import Certificate from './Certificate';
 import axios from 'axios';
 import Navbar from './Navbar';
+import {
+    DialogActionTrigger,
+    DialogBody,
+    DialogCloseTrigger,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogRoot,
+    DialogTitle,
+    DialogTrigger,
+} from './components/ui/dialog';
+import { useNavigate } from 'react-router-dom';
 
 const LeaderBoard = () => {
+    const navigate = useNavigate()
     const [isLoading, setLoading] = useState(false);
     const [players, setPlayers] = useState([]);
-    const [credits, setCredits] = useState(3);
     const [showCertificate, setShowCertificate] = useState(false);
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))
     // console.log("currentUser:", currentUser)
@@ -36,6 +48,10 @@ const LeaderBoard = () => {
         const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
     };
+
+    const handlePlayAgain = () => {
+        navigate("/mcqs")
+    }
 
     return (
         <Container maxW="container.md" py={8}>
@@ -79,13 +95,35 @@ const LeaderBoard = () => {
                 <Button colorScheme="purple" onClick={() => setShowCertificate(true)}>
                     Download Certificate
                 </Button>
-                {credits > 0 ?
-                    (<Button colorScheme="blue" onClick={() => console.log('Play Again using Credit')} isDisabled={credits <= 0}>
-                        Play Again Credit ({credits})
-                    </Button>) : (
+                {currentUser.credits > 0 ?
+                    (<DialogRoot>
+                        <DialogTrigger asChild>
+                            <Button colorScheme="blue" isDisabled={currentUser.credits <= 0}>
+                                Play Again Credit ({currentUser.credits})
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Play Again?</DialogTitle>
+                            </DialogHeader>
+                            <DialogBody>
+                                <p>
+                                    Everytime you play, you loose a credit. The credits renew everyday.
+                                    So don&apos;t worry if you&apos;re out of credits.
+                                </p>
+                            </DialogBody>
+                            <DialogFooter>
+                                <DialogActionTrigger asChild>
+                                    <Button variant="outline">Cancel</Button>
+                                </DialogActionTrigger>
+                                <Button onClick={handlePlayAgain}>Play</Button>
+                            </DialogFooter>
+                            <DialogCloseTrigger />
+                        </DialogContent>
+                    </DialogRoot>) : (
                         <>
                             <Text textAlign="center" color="gray.600">
-                                Agar saare credit khatam ho gye to:
+                                Bas beta, tumhare saare credits khatam ho gye 😈. Ab yaa to paise do yaa kal aao.
                             </Text>
                             <Button colorScheme="teal" onClick={() => console.log('Play Again using Payment')}>
                                 Play Again Pay (5Rs)
