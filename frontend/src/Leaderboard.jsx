@@ -79,15 +79,17 @@ const LeaderBoard = () => {
                 <Button colorScheme="purple" onClick={() => setShowCertificate(true)}>
                     Download Certificate
                 </Button>
-                <Button colorScheme="blue" onClick={() => console.log('Play Again using Credit')} isDisabled={credits <= 0}>
-                    Play Again Credit ({credits})
-                </Button>
-                <Text textAlign="center" color="gray.600">
-                    Agar saare credit khatam ho gye to:
-                </Text>
-                <Button colorScheme="teal" onClick={() => console.log('Play Again using Payment')}>
-                    Play Again Pay (5Rs)
-                </Button>
+                {credits > 0 ?
+                    (<Button colorScheme="blue" onClick={() => console.log('Play Again using Credit')} isDisabled={credits <= 0}>
+                        Play Again Credit ({credits})
+                    </Button>) : (
+                        <>
+                            <Text textAlign="center" color="gray.600">
+                                Agar saare credit khatam ho gye to:
+                            </Text>
+                            <Button colorScheme="teal" onClick={() => console.log('Play Again using Payment')}>
+                                Play Again Pay (5Rs)
+                            </Button></>)}
             </VStack>
 
             {showCertificate && (
