@@ -43,7 +43,7 @@ const LeaderBoard = () => {
                     <Image w={10} borderRadius={"50%"} src={currentUser.profilePic} />
                 </HStack>
             </HStack>
-            <VStack spacing={4} align="stretch" borderWidth={1} borderRadius="lg" p={4} overflowY="auto" h={"600px"}>
+            <VStack spacing={4} align="stretch" borderWidth={1} borderRadius="lg" mt={10} p={4} overflowY="auto" h={"600px"}>
 
                 {players.length === 0 ? (
                     <Text>No players to display</Text>
