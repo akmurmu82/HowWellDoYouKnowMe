@@ -26,6 +26,7 @@ export default function MCQs() {
     const [isDialogOpen, setIsDialogOpen] = useState(true)
     const navigate = useNavigate()
     const [timer, setTimer] = useState(90) // 90 seconds timer
+    // console.log(currentUser)
 
     const updateUser = (updatedUser) => {
         serCurrentUser(updatedUser)

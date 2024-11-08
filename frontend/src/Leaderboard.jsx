@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, VStack, Button, Text, Container, Image, HStack } from '@chakra-ui/react';
+import { Box, VStack, Button, Text, Container, Image, HStack, SimpleGrid } from '@chakra-ui/react';
 import Certificate from './Certificate';
 import axios from 'axios';
 import Navbar from './Navbar';
@@ -58,7 +58,7 @@ const LeaderBoard = () => {
         <Container maxW="container.md" py={8}>
 
             <Navbar title="Leaderboard" currentUser={currentUser} />
-            <VStack spacing={4} align="stretch" borderWidth={1} borderRadius="lg" mt={10} p={4} overflowY="auto" h={"600px"}>
+            <SimpleGrid spacing={4} align="stretch" borderWidth={1} borderRadius="lg" mt={10} p={4} overflowY="auto" h={"600px"}>
 
                 {isLoading ? (
                     <Text>Players ranking is loading...</Text>
@@ -69,7 +69,7 @@ const LeaderBoard = () => {
                         <PlayerCard key={index} index={index} name={name} score={score} credits={credits} profilePic={profilePic} timeTaken={timeTaken} />
                     )
                     ))}
-            </VStack>
+            </SimpleGrid>
 
             <VStack spacing={2} align="stretch" mt={4} borderWidth={1} borderRadius="lg" p={4}>
                 <Button colorScheme="whatsapp" onClick={handleShareOnWhatsApp}>

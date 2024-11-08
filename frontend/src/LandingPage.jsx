@@ -45,8 +45,8 @@ function LandingPage() {
         try {
             setLoading(true)
             console.log("formData:", formData)
+            // console.log(beBaseUrl)
             const res = await axios.post(`${beBaseUrl}/register`, formData)
-            // console.log(res)
             if (res.status == 201) {
                 setLoading(false)
                 console.log(res.data)
