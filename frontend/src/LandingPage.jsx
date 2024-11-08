@@ -2,6 +2,10 @@ import { Box, Button, Center, Container, Fieldset, Heading, Image, Input, Spinne
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Field } from './components/ui/field';
+import {
+    NativeSelectField,
+    NativeSelectRoot,
+} from "./components/ui/native-select"
 import heroImage from './assets/hero-image.gif';
 import { useState } from 'react';
 import { Toaster, toaster } from "./components/ui/toaster"
@@ -10,13 +14,13 @@ import Navbar from './Navbar';
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL;
 
 function LandingPage() {
-    let currentUser = JSON.parse(localStorage.getItem("currentUser")) || { name: "Welcome" }
+    let currentUser = JSON.parse(localStorage.getItem("currentUser")) || { name: "Welcome", profilePic: "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png" }
     console.log(currentUser)
 
     const navigate = useNavigate()
     const [isLoading, setLoading] = useState(false)
 
-    const [formData, setFormData] = useState({ name: "", email: "", relation: "" })
+    const [formData, setFormData] = useState(currentUser)
     const [formSubmitted, setFormSubmitted] = useState(false)
     const handleChange = (e) => {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -27,6 +31,7 @@ function LandingPage() {
         console.log(formData)
         try {
             setLoading(true)
+            console.log("formData:", formData)
             const res = await axios.post(`${beBaseUrl}/register`, formData)
             // console.log(res)
             if (res.status == 201) {
@@ -50,7 +55,7 @@ function LandingPage() {
 
     return (
         <>
-            <Navbar title="MCQs" currentUser={currentUser} />
+            <Navbar title="HOME" currentUser={currentUser} />
             <Toaster />
             {/* Content Section */}
             <Container maxW="container.md" mt={20} p={5} bg="white" borderRadius="lg" boxShadow="md">
@@ -95,8 +100,10 @@ function LandingPage() {
                                     <Field label="Name" value={formData.name} invalid={formSubmitted & !formData.name} errorText="Oye, apna naam dalo yaha!">
                                         <Input name="name" placeholder="Aman" onChange={handleChange} />
                                     </Field>
-                                    <Field label="Relation" value={formData.relation} invalid={formSubmitted & !formData.relation} errorText="Are bhai kon ho wo to batao...">
-                                        <Input name="relation" placeholder="Nephew" onChange={handleChange} />
+                                    <Field label="Relation">
+                                        <NativeSelectRoot>
+                                            <NativeSelectField name="relation" items={["Sibling", "Friend", "Cousine", "Uncle", "Aunt", "Niece", "Nephew", "Unknown"]} value={formData.relation} onChange={handleChange} />
+                                        </NativeSelectRoot>
                                     </Field>
                                     <Field label="Email" value={formData.email} invalid={formSubmitted & !formData.email} errorText="Ab ye bhi daal hi do na..">
                                         <Input name="email" placeholder="jaise ki aman@gmail.com" onChange={handleChange} />

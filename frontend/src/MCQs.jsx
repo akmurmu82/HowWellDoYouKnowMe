@@ -4,6 +4,17 @@ import { Box, VStack, Text, Button, Container, Spinner } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { Toaster, toaster } from './components/ui/toaster'
 import Navbar from './Navbar'
+import {
+    DialogActionTrigger,
+    DialogBody,
+    DialogCloseTrigger,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogRoot,
+    DialogTitle,
+    // DialogTrigger,
+} from "./components/ui/dialog"
 
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
 // const lsUser = JSON.parse(localStorage.getItem("currentUser"))
@@ -12,7 +23,7 @@ export default function MCQs() {
     const [isLoading, setLoading] = useState(false)
     const [selectedAnswers, setSelectedAnswers] = useState({})
     const [questions, setQuestions] = useState([])
-    // let [currentUser, setCurrentUser] = useState(lsUser)
+    const [isDialogOpen, setIsDialogOpen] = useState(true)
     const [isActive, setIsActive] = useState(true)
     const navigate = useNavigate()
     const [timer, setTimer] = useState(90) // 60 seconds timer
@@ -80,7 +91,7 @@ export default function MCQs() {
 
     // Timer effect with auto-submit on timeout
     useEffect(() => {
-        if (isActive && timer > 0) {
+        if (!isDialogOpen && isActive && timer > 0) {
             const interval = setInterval(() => setTimer(prev => prev - 1), 1000)
             return () => clearInterval(interval);
         } else if (timer === 0) {
@@ -90,6 +101,37 @@ export default function MCQs() {
 
     return (
         <Container maxW="container.md" mt={8}>
+            <DialogRoot lazyMount size={'cover'} open={isDialogOpen} onOpenChange={(e) => setIsDialogOpen(e.open)}>
+                {/* <DialogTrigger>
+                </DialogTrigger> */}
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>MCQ Test Information</DialogTitle>
+                    </DialogHeader>
+                    <DialogBody>
+                        <Text mb={4}>
+                            You are about to take an MCQ test with <b>20 questions</b>. Each question is worth <b>1 point</b>.
+                        </Text>
+                        <Text mb={4}>
+                            A <b>90-second timer</b> will track your speed. Once you select an answer, you won&apos;t be able to change it.
+                        </Text>
+                        <Text>
+                            After completing the test, you&apos;ll be ranked based on your <b>score and time taken</b> and your credits will be <b>decreased</b> by 1.
+                        </Text>
+                        <Text fontWeight="bold" mt={4}>
+                            Let’s see how well you know me!
+                        </Text>
+                    </DialogBody>
+                    <DialogFooter>
+                        <DialogActionTrigger asChild>
+                            <Button variant="outline">Cancel</Button>
+                        </DialogActionTrigger>
+                        <Button colorScheme="blue" onClick={() => setIsDialogOpen(false)}>Start Test</Button>
+                    </DialogFooter>
+                    <DialogCloseTrigger />
+                </DialogContent>
+
+            </DialogRoot>
             <Toaster />
             <Navbar title="MCQs" timer={timer} currentUser={currentUser} />
             <VStack spacing={6} align="stretch" my={5} mt={20}>
