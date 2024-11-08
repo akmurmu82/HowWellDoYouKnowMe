@@ -30,7 +30,7 @@ const LeaderBoard = () => {
             setLoading(true)
             try {
                 let res = await axios.get(`${beBaseUrl}/players`);
-                console.log("Players fetched successfully.", res, res.data);
+                // console.log("Players fetched successfully.", res, res.data);
                 if (res.status == 200) {
                     setPlayers(res.data)
                 }

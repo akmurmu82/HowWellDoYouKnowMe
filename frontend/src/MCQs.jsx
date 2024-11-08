@@ -17,7 +17,6 @@ import {
 } from "./components/ui/dialog"
 
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
-// const lsUser = JSON.parse(localStorage.getItem("currentUser"))
 
 export default function MCQs() {
     const [isLoading, setLoading] = useState(false)
@@ -101,32 +100,40 @@ export default function MCQs() {
 
     return (
         <Container maxW="container.md" mt={8}>
-            <DialogRoot lazyMount size={'cover'} open={isDialogOpen} onOpenChange={(e) => setIsDialogOpen(e.open)}>
+            <DialogRoot lazyMount size={'cover'} open={isDialogOpen} onOpenChange={() => currentUser.credits <= 0 ? navigate("/leaderboard") : null}>
                 {/* <DialogTrigger>
                 </DialogTrigger> */}
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>MCQ Test Information</DialogTitle>
+                        {currentUser.credits <= 0 ?
+                            (<DialogTitle>Credits nhi bache ab 🥲</DialogTitle>) :
+                            (<DialogTitle>MCQ Test Information</DialogTitle>)
+                        }
                     </DialogHeader>
-                    <DialogBody>
-                        <Text mb={4}>
-                            You are about to take an MCQ test with <b>20 questions</b>. Each question is worth <b>1 point</b>.
-                        </Text>
-                        <Text mb={4}>
-                            A <b>90-second timer</b> will track your speed. Once you select an answer, you won&apos;t be able to change it.
-                        </Text>
-                        <Text>
-                            After completing the test, you&apos;ll be ranked based on your <b>score and time taken</b> and your credits will be <b>decreased</b> by 1.
-                        </Text>
-                        <Text fontWeight="bold" mt={4}>
-                            Let’s see how well you know me!
-                        </Text>
-                    </DialogBody>
+                    {currentUser.credits <= 0 ?
+                        <DialogBody>
+                            <Text>
+                                Ab tumhe kal tak ka wait karna padega 😉
+                            </Text>
+                        </DialogBody> :
+                        <DialogBody>
+                            <Text mb={4}>
+                                You are about to take an MCQ test with <b>20 questions</b>. Each question is worth <b>1 point</b>.
+                            </Text>
+                            <Text mb={4}>
+                                A <b>90-second timer</b> will track your speed. Once you select an answer, you won&apos;t be able to change it.
+                            </Text>
+                            <Text>
+                                After completing the test, you&apos;ll be ranked based on your <b>score and time taken</b> and your credits will be <b>decreased</b> by 1.
+                            </Text>
+                            <Text fontWeight="bold" mt={4}>
+                                Let’s see how well you know me!
+                            </Text>
+                        </DialogBody>}
                     <DialogFooter>
                         <DialogActionTrigger asChild>
-                            <Button variant="outline">Cancel</Button>
+                            <Button colorScheme="blue" onClick={() => setIsDialogOpen(false)}>{currentUser.credits <= 0 ? "Thik hai" : "Start Test"}</Button>
                         </DialogActionTrigger>
-                        <Button colorScheme="blue" onClick={() => setIsDialogOpen(false)}>Start Test</Button>
                     </DialogFooter>
                     <DialogCloseTrigger />
                 </DialogContent>
