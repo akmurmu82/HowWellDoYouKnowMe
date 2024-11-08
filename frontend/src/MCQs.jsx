@@ -29,7 +29,7 @@ export default function MCQs() {
     const [questions, setQuestions] = useState([])
     const [isDialogOpen, setIsDialogOpen] = useState(true)
     const navigate = useNavigate()
-    const [timer, setTimer] = useState(90) // 90 seconds timer
+    const [timer, setTimer] = useState(120) // 120 seconds timer
     // console.log(currentUser)
 
     // Create Audio instances with volume control
