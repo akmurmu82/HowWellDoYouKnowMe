@@ -16,6 +16,10 @@ import {
     // DialogTrigger,
 } from "./components/ui/dialog"
 
+import correctSoundFile from './assets/correct-answer.mp3';
+import wrongSoundFile from './assets/wrong-sound.mp3';
+import submitSoundFile from './assets/submit-sound.mp3';
+
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
 
 export default function MCQs() {
@@ -27,6 +31,16 @@ export default function MCQs() {
     const navigate = useNavigate()
     const [timer, setTimer] = useState(90) // 90 seconds timer
     // console.log(currentUser)
+
+    // Create Audio instances with volume control
+    const correctSound = new Audio(correctSoundFile);
+    correctSound.volume = 0.3; // Adjusts the volume to 50%
+
+    const wrongSound = new Audio(wrongSoundFile);
+    wrongSound.volume = 0.2; // Adjusts the volume to 30%
+
+    const submitSound = new Audio(submitSoundFile);
+    submitSound.volume = 0.3; // Adjusts the volume to 70%
 
     const updateUser = (updatedUser) => {
         serCurrentUser(updatedUser)
@@ -51,14 +65,22 @@ export default function MCQs() {
     }, [fetchAllQuestions])
 
     const handleAnswerClick = useCallback((questionId, option) => {
+        const isCorrect = option === questions.find((q) => q._id === questionId).correctAnswer;
+
+        // Play sound based on answer correctness
+        isCorrect ? correctSound.play() : wrongSound.play();
+
         setSelectedAnswers(prev => ({
             ...prev,
             [questionId]: option,
         }));
-    }, []);
+    }, [questions]);
 
     const handleSubmit = useCallback(async () => {
         setLoading(true);
+
+        // Play submit sound
+        submitSound.play();
 
         let score = questions.reduce((acc, question) => {
             return acc + (selectedAnswers[question._id] === question.correctAnswer ? 1 : 0);

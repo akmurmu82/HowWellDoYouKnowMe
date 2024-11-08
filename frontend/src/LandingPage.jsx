@@ -92,20 +92,13 @@ function LandingPage() {
                     {/* Description */}
                     <Box textAlign="center" >
                         <Heading fontSize="2xl" color="pink.500" mb={3}>
-                            Welcome to My World
+                            Welcome to &ldquo;How Well Do You Know Me?&ldquo;
                         </Heading>
                         <Text fontSize="lg" color="#fff">
-                            Life’s simple pleasures hold a special magic—like the first sip of{" "}
-                            <Text as="span" fontWeight="bold">freshly brewed coffee</Text>, the{" "}
-                            <Text as="span" fontWeight="bold">tap of rain</Text> on the window with a{" "}
-                            <Text as="span" fontWeight="bold">good mystery novel</Text>, the thrill of an{" "}
-                            <Text as="span" fontWeight="bold">epic road trip</Text>, or{" "}
-                            <Text as="span" fontWeight="bold">cozy rainy days</Text>. These little favorites brighten my world.
-                        </Text>
+                            the ultimate friend test! Here, I’ll find out who’s been paying attention and who’s just been nodding along. With questions that range from the easy (What’s my favorite snack?) to the downright tricky (What would I save in a fire?), this app is your chance to prove just how well you know me.</Text>
 
                         <Text mt={4} fontSize="md" color="#fff">
-                            But can you guess them all? Take the quiz and see how well you know me!
-                        </Text>
+                            Ready to uncover some secrets and share a few laughs? Let’s get started!                        </Text>
                         {/* Form */}
                         <Center mt={6} color={'black'}>
                             {currentUser.name ?
