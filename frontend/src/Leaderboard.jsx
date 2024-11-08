@@ -45,10 +45,11 @@ const LeaderBoard = () => {
     }, [beBaseUrl])
 
     const handleShareOnWhatsApp = () => {
-        const message = `Check out my achievement! I scored ${currentUser.score} with a time of ${currentUser.timeTaken} seconds on the LeaderBoard.`;
+        const message = `Hii\nAmit made a web app...\n\nCheck out my achievement! I scored ${currentUser.score} with a time of ${currentUser.timeTaken} seconds on the LeaderBoard.\n\nTry it here: https://how-well-do-you-know-me.vercel.app/`;
         const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
     };
+    
 
     const handlePlayAgain = () => {
         navigate("/mcqs")
