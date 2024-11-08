@@ -68,10 +68,10 @@ app.patch("/update", async (req, res) => {
     }
 })
 
-// Route to get all questions
+// Route to get 20 random questions
 app.get('/questions', async (req, res) => {
     try {
-        const questions = await Question.find(); // Fetch all questions from the database
+        const questions = await Question.aggregate([{ $sample: { size: 20 } }]); // Fetch 20 random questions
         res.status(200).json(questions); // Send back the questions as a JSON response
     } catch (error) {
         console.error('Error fetching questions:', error);
