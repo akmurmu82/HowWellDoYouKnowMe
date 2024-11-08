@@ -14,7 +14,7 @@ import Navbar from './Navbar';
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL;
 
 function LandingPage() {
-    let currentUser = JSON.parse(localStorage.getItem("currentUser")) || { name: "Welcome", profilePic: "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png" }
+    let currentUser = JSON.parse(localStorage.getItem("currentUser")) || { name: "", profilePic: "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png" }
     console.log(currentUser)
 
     const navigate = useNavigate()

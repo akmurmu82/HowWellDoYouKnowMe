@@ -23,7 +23,7 @@ function Navbar({ title, timer, currentUser }) {
             </Heading>
             {timer ? <Heading size="md">Timer: {String(timer).padStart(2, '0')}</Heading> : null}
             <HStack>
-                <Text>{currentUser.name.length > 10 ? currentUser.name.slice(0, 10) + "..." : currentUser.name}</Text>
+                <Text>{currentUser.name.length > 10 ? currentUser.name.slice(0, 10) + "..." : !currentUser.name ? "Welcome" : currentUser.name}</Text>
                 <DrawerRoot>
                     <DrawerBackdrop />
                     <DrawerTrigger asChild>
