@@ -23,7 +23,7 @@ const LeaderBoard = () => {
     const [players, setPlayers] = useState([]);
     const [showCertificate, setShowCertificate] = useState(false);
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))
-    // console.log("currentUser:", currentUser)
+    console.log("currentUser:", currentUser)
     const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
 
     useEffect(() => {
@@ -58,20 +58,19 @@ const LeaderBoard = () => {
         <Container maxW="container.md" py={8}>
 
             <Navbar title="Leaderboard" currentUser={currentUser} />
-            <SimpleGrid spacing={4} align="stretch" borderWidth={1} borderRadius="lg" mt={10} p={4} overflowY="auto" h={"600px"}>
-
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap={2} mt={10} borderWidth={1} borderRadius="lg" p={4} overflowY="auto" h={"600px"}>
                 {isLoading ? (
                     <Text>Players ranking is loading...</Text>
                 ) :
                     players.length === 0 ? (
                         <Text>No players to display</Text>
-                    ) : (players.map(({name, score, credits, profilePic, timeTaken}, index) => (
-                        <PlayerCard key={index} index={index} name={name} score={score} credits={credits} profilePic={profilePic} timeTaken={timeTaken} />
+                    ) : (players.map(({ name, score, credits, profilePic, timeTaken }, index) => (
+                        <PlayerCard key={index} currentUser={currentUser} index={index} name={name} score={score} credits={credits} profilePic={profilePic} timeTaken={timeTaken} />
                     )
                     ))}
             </SimpleGrid>
 
-            <VStack spacing={2} align="stretch" mt={4} borderWidth={1} borderRadius="lg" p={4}>
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap={2} mt={4} borderWidth={1} borderRadius="lg" p={4}>
                 <Button colorScheme="whatsapp" onClick={handleShareOnWhatsApp}>
                     Share on WhatsApp
                 </Button>
@@ -103,20 +102,19 @@ const LeaderBoard = () => {
                             </DialogFooter>
                             <DialogCloseTrigger />
                         </DialogContent>
-                    </DialogRoot>) : (
-                        <>
-                            <Text textAlign="center" color="gray.600">
-                                Bas beta, tumhare saare credits khatam ho gye 😈. Ab yaa to paise do yaa kal aao.
-                            </Text>
-                            <Button colorScheme="teal" onClick={() => console.log('Play Again using Payment')}>
-                                Play Again Pay (5Rs)
-                            </Button></>)}
-            </VStack>
+                    </DialogRoot>) :
+                    (<Button colorScheme="teal" onClick={() => console.log('Play Again using Payment')}>
+                        Play Again Pay (5Rs)
+                    </Button>)
+                }
+            </SimpleGrid>
 
-            {showCertificate && (
-                <Certificate name={currentUser.name} score={currentUser.score} timeTaken={currentUser.timeTaken} />
-            )}
-        </Container>
+            {
+                showCertificate && (
+                    <Certificate name={currentUser.name} score={currentUser.score} timeTaken={currentUser.timeTaken} />
+                )
+            }
+        </Container >
     );
 };
 

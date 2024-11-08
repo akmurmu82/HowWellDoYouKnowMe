@@ -1,6 +1,6 @@
 import { Box, VStack, Button, Text, Container, Image, HStack } from '@chakra-ui/react';
 
-const PlayerCard = ({name, index, score, credits, profilePic, timeTaken})=> {
+const PlayerCard = ({ currentUser, name, index, score, credits, profilePic, timeTaken }) => {
     return (
         <HStack
             p={3}
@@ -8,7 +8,7 @@ const PlayerCard = ({name, index, score, credits, profilePic, timeTaken})=> {
             justifyContent={"space-around"}
             borderWidth={1}
             borderRadius="md"
-            bg={index === 0 ? 'yellow.100' : 'gray.100'}
+            bg={currentUser.name == name ? "blue.200" : index === 0 ? 'yellow.200' : index === 1 ? 'gray.200' : index === 2 ? 'orange.200' : "gray.200"}
             textAlign="center"
         >
             <Image w={20} borderRadius={"50%"} src={profilePic} />
@@ -21,9 +21,9 @@ const PlayerCard = ({name, index, score, credits, profilePic, timeTaken})=> {
                     <Text>Time Taken: {timeTaken}s</Text>
                     <Text>Credits remaining: {credits}s</Text>
                 </Box>
-                </VStack>
+            </VStack>
         </HStack>
-        )
-    }
-    
-    export default PlayerCard;
+    )
+}
+
+export default PlayerCard;

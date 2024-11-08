@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import axios from "axios"
-import { Box, VStack, Text, Button, Container, Spinner } from '@chakra-ui/react'
+import { Box, VStack, Text, Button, Container, Spinner, SimpleGrid } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { Toaster, toaster } from './components/ui/toaster'
 import Navbar from './Navbar'
@@ -95,7 +95,7 @@ export default function MCQs() {
 
     return (
         <Container maxW="container.md" mt={8}>
-            <DialogRoot defaultOpen={!!currentUser.name} lazyMount size={'cover'} open={isDialogOpen} onOpenChange={() => currentUser.credits <= 0 ? navigate("/leaderboard") : null}>
+            <DialogRoot defaultOpen={!!currentUser.name} lazyMount size={'lg'} open={isDialogOpen} onOpenChange={() => currentUser.credits <= 0 ? navigate("/leaderboard") : null}>
                 <DialogContent>
                     <DialogHeader>
                         {currentUser.credits <= 0 ? (
@@ -138,7 +138,7 @@ export default function MCQs() {
                 {questions.map((question) => (
                     <Box key={question._id} p={6} borderWidth={1} borderRadius="lg" bg="white" color="black">
                         <Text mb={4} fontWeight="bold">{question.questionText}</Text>
-                        <VStack align="stretch" spacing={3}>
+                        <SimpleGrid columns={2} gap={2}>
                             {question.options.map((option) => {
                                 const isCorrect = option === question.correctAnswer;
                                 const isSelected = selectedAnswers[question._id] === option;
@@ -157,7 +157,7 @@ export default function MCQs() {
                                     </Button>
                                 );
                             })}
-                        </VStack>
+                        </SimpleGrid>
                     </Box>
                 ))}
                 <Button colorScheme="blue" size="lg" onClick={handleSubmit} position={'fixed'} bottom={5} left={"50%"} transform={"translateX(-50%)"} disabled={isLoading}>
