@@ -19,103 +19,95 @@ import {
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
 
 export default function MCQs() {
+    const [currentUser, serCurrentUser] = useState(() => JSON.parse(localStorage.getItem("currentUser")) || { name: "", profilePic: "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png" })
     const [isLoading, setLoading] = useState(false)
     const [selectedAnswers, setSelectedAnswers] = useState({})
     const [questions, setQuestions] = useState([])
     const [isDialogOpen, setIsDialogOpen] = useState(true)
-    const [isActive, setIsActive] = useState(true)
     const navigate = useNavigate()
-    const [timer, setTimer] = useState(90) // 60 seconds timer
-    // console.log(currentUser)
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    const [timer, setTimer] = useState(90) // 90 seconds timer
+
+    const updateUser = (updatedUser) => {
+        serCurrentUser(updatedUser)
+        localStorage.setItem("currentUser", JSON.stringify(updatedUser))
+    }
+
+    const fetchAllQuestions = useCallback(async () => {
+        try {
+            const res = await axios.get(`${beBaseUrl}/questions`);
+            setQuestions(res.data);
+        } catch (error) {
+            toaster.create({
+                title: "Error fetching questions!",
+                description: error.message,
+                duration: 2000,
+            });
+        }
+    }, []);
 
     useEffect(() => {
-        const fetchAllQuestions = async () => {
-            try {
-                const res = await axios.get(`${beBaseUrl}/questions`)
-                setQuestions(res.data)
-            } catch (error) {
-                toaster.create({
-                    title: "Error fetching questions!",
-                    description: error.message,
-                    duration: 2000
-                })
-            }
-        }
         fetchAllQuestions()
-    }, [])
+    }, [fetchAllQuestions])
 
-    const handleAnswerClick = (questionId, option) => {
+    const handleAnswerClick = useCallback((questionId, option) => {
         setSelectedAnswers(prev => ({
             ...prev,
             [questionId]: option,
-        }))
-    }
+        }));
+    }, []);
 
     const handleSubmit = useCallback(async () => {
-        setIsActive(false)
-        setLoading(true)
+        setLoading(true);
 
-        // Score calculation
-        let score = 0
-        questions.forEach((question) => {
-            if (selectedAnswers[question._id] === question.correctAnswer) {
-                score++
-            }
-        })
+        let score = questions.reduce((acc, question) => {
+            return acc + (selectedAnswers[question._id] === question.correctAnswer ? 1 : 0);
+        }, 0);
 
-        const updatedUser = { ...currentUser, score, timeTaken: 90 - timer, credits: currentUser.credits - 1 }
-        console.log("updatedUser:", updatedUser)
-
-        console.log("user to update:", updatedUser)
+        const updatedUser = { ...currentUser, score, timeTaken: 90 - timer, credits: currentUser.credits - 1 };
 
         try {
             await axios.patch(`${beBaseUrl}/update`, updatedUser);
-            localStorage.setItem("currentUser", JSON.stringify(updatedUser))
-            navigate("/leaderboard")
+            updateUser(updatedUser)
+            // localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+            navigate("/leaderboard");
         } catch (error) {
             toaster.create({
                 title: "Error updating credits",
                 description: error.message,
                 status: "error",
-                duration: 2000
-            })
-            setLoading(true)
-            console.error("Error updating user credits:", error);
+                duration: 2000,
+            });
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-
-    }, [selectedAnswers, currentUser, navigate, questions, timer])
+    }, [selectedAnswers, navigate, currentUser, questions, timer]);
 
     // Timer effect with auto-submit on timeout
     useEffect(() => {
-        if (!isDialogOpen && isActive && timer > 0) {
-            const interval = setInterval(() => setTimer(prev => prev - 1), 1000)
+        if (!isDialogOpen && timer > 0) {
+            const interval = setInterval(() => setTimer(prev => prev - 1), 1000);
             return () => clearInterval(interval);
         } else if (timer === 0) {
-            handleSubmit()
+            handleSubmit();
         }
-    }, [isActive, timer, handleSubmit])
+    }, [isDialogOpen, timer, handleSubmit]);
 
     return (
         <Container maxW="container.md" mt={8}>
-            <DialogRoot lazyMount size={'cover'} open={isDialogOpen} onOpenChange={() => currentUser.credits <= 0 ? navigate("/leaderboard") : null}>
-                {/* <DialogTrigger>
-                </DialogTrigger> */}
+            <DialogRoot defaultOpen={!!currentUser.name} lazyMount size={'cover'} open={isDialogOpen} onOpenChange={() => currentUser.credits <= 0 ? navigate("/leaderboard") : null}>
                 <DialogContent>
                     <DialogHeader>
-                        {currentUser.credits <= 0 ?
-                            (<DialogTitle>Credits nhi bache ab 🥲</DialogTitle>) :
-                            (<DialogTitle>MCQ Test Information</DialogTitle>)
-                        }
+                        {currentUser.credits <= 0 ? (
+                            <DialogTitle>Credits nhi bache ab 🥲</DialogTitle>
+                        ) : (
+                            <DialogTitle>MCQ Test Information</DialogTitle>
+                        )}
                     </DialogHeader>
-                    {currentUser.credits <= 0 ?
+                    {currentUser.credits <= 0 ? (
                         <DialogBody>
-                            <Text>
-                                Ab tumhe kal tak ka wait karna padega 😉
-                            </Text>
-                        </DialogBody> :
+                            <Text>Ab tumhe kal tak ka wait karna padega 😉</Text>
+                        </DialogBody>
+                    ) : (
                         <DialogBody>
                             <Text mb={4}>
                                 You are about to take an MCQ test with <b>20 questions</b>. Each question is worth <b>1 point</b>.
@@ -126,21 +118,21 @@ export default function MCQs() {
                             <Text>
                                 After completing the test, you&apos;ll be ranked based on your <b>score and time taken</b> and your credits will be <b>decreased</b> by 1.
                             </Text>
-                            <Text fontWeight="bold" mt={4}>
-                                Let’s see how well you know me!
-                            </Text>
-                        </DialogBody>}
+                            <Text fontWeight="bold" mt={4}>Let’s see how well you know me!</Text>
+                        </DialogBody>
+                    )}
                     <DialogFooter>
                         <DialogActionTrigger asChild>
-                            <Button colorScheme="blue" onClick={() => setIsDialogOpen(false)}>{currentUser.credits <= 0 ? "Thik hai" : "Start Test"}</Button>
+                            <Button colorScheme="blue" onClick={() => setIsDialogOpen(false)}>
+                                {currentUser.credits <= 0 ? "Thik hai" : "Start Test"}
+                            </Button>
                         </DialogActionTrigger>
                     </DialogFooter>
                     <DialogCloseTrigger />
                 </DialogContent>
-
             </DialogRoot>
             <Toaster />
-            <Navbar title="MCQs" timer={timer} />
+            <Navbar title="MCQs" timer={timer} currentUser={currentUser} />
             <VStack spacing={6} align="stretch" my={5} mt={20}>
                 {questions.map((question) => (
                     <Box key={question._id} p={6} borderWidth={1} borderRadius="lg" bg="white" color="black">
@@ -167,13 +159,7 @@ export default function MCQs() {
                         </VStack>
                     </Box>
                 ))}
-
-                <Button
-                    colorScheme="blue"
-                    size="lg"
-                    onClick={handleSubmit}
-                    disabled={isLoading}
-                >
+                <Button colorScheme="blue" size="lg" onClick={handleSubmit} position={'fixed'} bottom={5} left={"50%"} transform={"translateX(-50%)"} disabled={isLoading}>
                     {isLoading ? <Spinner size="md" /> : "Bas, Itna hi pata hai"}
                 </Button>
             </VStack>

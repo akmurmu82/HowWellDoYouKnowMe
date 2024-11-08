@@ -15,7 +15,7 @@ const beBaseUrl = import.meta.env.VITE_BE_BASE_URL;
 
 function LandingPage() {
     let currentUser = JSON.parse(localStorage.getItem("currentUser")) || { name: "", profilePic: "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png" }
-    // console.log(currentUser)
+    console.log(currentUser, Boolean(currentUser.name))
     const navigate = useNavigate()
     const [isLoading, setLoading] = useState(false)
     const [formData, setFormData] = useState(currentUser)
@@ -41,6 +41,7 @@ function LandingPage() {
 
     const handleSubmit = async () => {
         setFormSubmitted(true)
+        if (!formData.name) return
         try {
             setLoading(true)
             console.log("formData:", formData)
@@ -63,6 +64,12 @@ function LandingPage() {
             setLoading(false)
             console.log(error)
         }
+    }
+
+    const handleLogOut = () => {
+        localStorage.clear()
+        console.log("logged out!")
+        navigate("/")
     }
 
     return (
@@ -104,10 +111,10 @@ function LandingPage() {
                             {currentUser.name ?
                                 <HStack>
                                     {currentUser.credits <= 0 ?
-                                        <Button variant="surface" onClick={()=> navigate("/leaderboard")}>See Leaderboard</Button> :
-                                        <Button variant="surface" onClick={()=> navigate("/mcqs")}>Play MCQ</Button>
+                                        <Button variant="surface" onClick={() => navigate("/leaderboard")}>See Leaderboard</Button> :
+                                        <Button variant="surface" onClick={() => navigate("/mcqs")}>Play MCQ</Button>
                                     }
-                                    <Button variant="surface">Log out</Button>
+                                    <Button variant="surface" onClick={handleLogOut}>Log out</Button>
                                 </HStack> :
                                 <Fieldset.Root size="lg" maxW="md">
                                     <Stack>
@@ -118,20 +125,20 @@ function LandingPage() {
                                     </Stack>
                                     <Fieldset.Content color={'#fff'}>
                                         <Field label="Name" value={formData.name} invalid={formSubmitted & !formData.name} errorText="Oye, apna naam dalo yaha!">
-                                            <Input name="name" placeholder="Aman" onChange={handleChange} />
+                                            <Input variant={"subtle"} name="name" placeholder="Aman" onChange={handleChange} />
                                         </Field>
                                         <Field label="Relation">
-                                            <NativeSelectRoot>
+                                            <NativeSelectRoot variant={"subtle"}>
                                                 <NativeSelectField name="relation" items={["Sibling", "Friend", "Cousine", "Uncle", "Aunt", "Niece", "Nephew", "Unknown"]} value={formData.relation} onChange={handleChange} />
                                             </NativeSelectRoot>
                                         </Field>
                                         <Field label="Email" value={formData.email} invalid={formSubmitted & !formData.email} errorText="Ab ye bhi daal hi do na..">
-                                            <Input name="email" placeholder="jaise ki aman@gmail.com" onChange={handleChange} />
+                                            <Input variant={"subtle"} name="email" placeholder="jaise ki aman@gmail.com" onChange={handleChange} />
                                         </Field>
                                     </Fieldset.Content>
                                     <Button type="submit" onClick={handleSubmit} mt={4} bg="pink" disabled={isLoading}>
                                         {isLoading && <Spinner size="md" />}
-                                        Submit
+                                        Sign In...
                                     </Button>
                                 </Fieldset.Root>
                             }
