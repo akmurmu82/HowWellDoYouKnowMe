@@ -7,7 +7,7 @@ require("dotenv").config()
 const cron = require('node-cron');
 
 // Resetting credits of all the users back to 3 at midnight
-cron.schedule('*/2 * * * *', async () => {
+cron.schedule('0 0 * * *', async () => {
     try {
         await User.updateMany({}, { $set: { credits: 3 } });
         console.log("Credits reset to 3 for all users");
