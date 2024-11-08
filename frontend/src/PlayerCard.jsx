@@ -1,4 +1,5 @@
-import { Box, VStack, Button, Text, Container, Image, HStack } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
+import { Box, VStack, Text, Image, HStack } from '@chakra-ui/react';
 
 const PlayerCard = ({ currentUser, name, index, score, credits, profilePic, timeTaken }) => {
     return (
@@ -25,5 +26,15 @@ const PlayerCard = ({ currentUser, name, index, score, credits, profilePic, time
         </HStack>
     )
 }
+
+PlayerCard.propTypes = {
+    currentUser: PropTypes.object,
+    name: PropTypes.string,
+    index: PropTypes.number,
+    score: PropTypes.number,
+    credits: PropTypes.number,
+    profilePic: PropTypes.string,
+    timeTaken: PropTypes.number
+};
 
 export default PlayerCard;

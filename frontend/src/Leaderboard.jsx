@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, VStack, Button, Text, Container, Image, HStack, SimpleGrid } from '@chakra-ui/react';
+import { Button, Text, Container, SimpleGrid } from '@chakra-ui/react';
 import Certificate from './Certificate';
 import axios from 'axios';
 import Navbar from './Navbar';
@@ -23,7 +23,7 @@ const LeaderBoard = () => {
     const [players, setPlayers] = useState([]);
     const [showCertificate, setShowCertificate] = useState(false);
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))
-    console.log("currentUser:", currentUser)
+    // console.log("currentUser:", currentUser)
     const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
 
     useEffect(() => {
