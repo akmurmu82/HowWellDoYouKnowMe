@@ -16,7 +16,6 @@ cron.schedule('*/2 * * * *', async () => {
     }
 });
 
-
 const port = process.env.PORT
 
 const app = express()
@@ -34,7 +33,6 @@ app.get("/", (req, res) => {
 app.post("/register", async (req, res) => {
     try {
         const { name, email, relation } = req.body
-
         const existingUser = await User.findOne({ name })
         if (!existingUser) {
             const newUser = new User({ name, email, relation })

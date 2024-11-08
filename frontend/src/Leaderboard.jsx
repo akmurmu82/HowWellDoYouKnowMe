@@ -3,6 +3,7 @@ import { Box, VStack, Button, Text, Container, Image, HStack } from '@chakra-ui/
 import Certificate from './Certificate';
 import axios from 'axios';
 import Navbar from './Navbar';
+import PlayerCard from './PlayerCard';
 import {
     DialogActionTrigger,
     DialogBody,
@@ -64,26 +65,8 @@ const LeaderBoard = () => {
                 ) :
                     players.length === 0 ? (
                         <Text>No players to display</Text>
-                    ) : (players.map((player, index) => (
-                        <HStack
-                            key={player.name}
-                            p={3}
-                            color={"black"}
-                            justifyContent={"space-around"}
-                            borderWidth={1}
-                            borderRadius="md"
-                            bg={index === 0 ? 'yellow.100' : 'gray.100'}
-                            textAlign="center"
-                        >
-                            <Image w={20} borderRadius={"50%"} src={player.profilePic} />
-                            <Box>
-                                <Text fontWeight="bold">
-                                    {index + 1 === 1 ? '1st ' : `${index + 1}th `} {player.name}
-                                </Text>
-                                <Text>Score: {player.score}</Text>
-                                <Text>Time Taken: {player.timeTaken}s</Text>
-                            </Box>
-                        </HStack>
+                    ) : (players.map(({name, score, credits, profilePic, timeTaken}, index) => (
+                        <PlayerCard key={index} index={index} name={name} score={score} credits={credits} profilePic={profilePic} timeTaken={timeTaken} />
                     )
                     ))}
             </VStack>

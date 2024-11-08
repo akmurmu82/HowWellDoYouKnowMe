@@ -140,7 +140,7 @@ export default function MCQs() {
 
             </DialogRoot>
             <Toaster />
-            <Navbar title="MCQs" timer={timer} currentUser={currentUser} />
+            <Navbar title="MCQs" timer={timer} />
             <VStack spacing={6} align="stretch" my={5} mt={20}>
                 {questions.map((question) => (
                     <Box key={question._id} p={6} borderWidth={1} borderRadius="lg" bg="white" color="black">
