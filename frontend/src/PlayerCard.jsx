@@ -1,15 +1,15 @@
-import PropTypes from 'prop-types';
 import { Box, VStack, Text, Image, HStack } from '@chakra-ui/react';
 
-const PlayerCard = ({ currentUser, name, index, score, credits, profilePic, timeTaken }) => {
+const PlayerCard = ({ name, currentUser, index, score, credits, profilePic, timeTaken }) => {
     return (
         <HStack
             p={3}
             color={"black"}
             justifyContent={"space-around"}
-            borderWidth={1}
+            borderWidth={currentUser.name === name ? 5 : 1}
+            borderColor={currentUser.name === name ? "red" : ''}
             borderRadius="md"
-            bg={currentUser.name == name ? "blue.200" : index === 0 ? 'yellow.200' : index === 1 ? 'gray.200' : index === 2 ? 'orange.200' : "gray.200"}
+            bg={index === 0 ? 'yellow.300' : index === 1 ? '#C0C0C0' : index === 2 ? '#B08D57' : 'gray.100'}
             textAlign="center"
         >
             <Image w={20} borderRadius={"50%"} src={profilePic} />
@@ -26,15 +26,5 @@ const PlayerCard = ({ currentUser, name, index, score, credits, profilePic, time
         </HStack>
     )
 }
-
-PlayerCard.propTypes = {
-    currentUser: PropTypes.object,
-    name: PropTypes.string,
-    index: PropTypes.number,
-    score: PropTypes.number,
-    credits: PropTypes.number,
-    profilePic: PropTypes.string,
-    timeTaken: PropTypes.number
-};
 
 export default PlayerCard;

@@ -142,7 +142,7 @@ export default function MCQs() {
                             {question.options.map((option) => {
                                 const isCorrect = option === question.correctAnswer;
                                 const isSelected = selectedAnswers[question._id] === option;
-                                const bgColor = isSelected ? (isCorrect ? 'green.400' : 'red.400') : 'gray.200';
+                                const bgColor = isSelected ? (isCorrect ? 'green' : 'red') : 'gray.200';
 
                                 return (
                                     <Button
@@ -160,7 +160,7 @@ export default function MCQs() {
                         </SimpleGrid>
                     </Box>
                 ))}
-                <Button colorScheme="blue" size="lg" onClick={handleSubmit} position={'fixed'} bottom={5} left={"50%"} transform={"translateX(-50%)"} disabled={isLoading}>
+                <Button bg="black" color="#fff" size="lg" onClick={handleSubmit} position={'fixed'} bottom={5} left={"50%"} transform={"translateX(-50%)"} disabled={isLoading}>
                     {isLoading ? <Spinner size="md" /> : "Bas, Itna hi pata hai"}
                 </Button>
             </VStack>
