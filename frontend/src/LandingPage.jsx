@@ -47,19 +47,14 @@ function LandingPage() {
             console.log("formData:", formData)
             // console.log(beBaseUrl)
             const res = await axios.post(`${beBaseUrl}/register`, formData)
-            if (res.status == 201) {
-                setLoading(false)
-                console.log(res.data)
-                localStorage.setItem("currentUser", JSON.stringify(res.data.user))
-                toaster.create({
-                    title: "Ho gya",
-                    description: "Thanks for registering.",
-                    duration: 2000,
-                    onStatusChange({ status }) {
-                        if (status === "unmounted") navigate("/mcqs")
-                    },
-                })
-            }
+            setLoading(false)
+            console.log(res.data)
+            localStorage.setItem("currentUser", JSON.stringify(res.data.user))
+            toaster.create({
+                title: "Ho gya",
+                description: "Thanks for registering.",
+                duration: 2000,
+            })
         } catch (error) {
             setLoading(false)
             console.log(error)
@@ -118,7 +113,7 @@ function LandingPage() {
                                     </Stack>
                                     <Fieldset.Content color={'#fff'}>
                                         <Field label="Name" value={formData.name} invalid={formSubmitted & !formData.name} errorText="Oye, apna naam dalo yaha!">
-                                            <Input variant={"subtle"} name="name" placeholder="Aman" onChange={handleChange} />
+                                            <Input variant={"subtle"} name="name" placeholder="Tumhara naam..." onChange={handleChange} />
                                         </Field>
                                         <Field label="Relation">
                                             <NativeSelectRoot variant={"subtle"}>

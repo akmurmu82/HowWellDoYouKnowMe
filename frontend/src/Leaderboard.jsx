@@ -49,7 +49,7 @@ const LeaderBoard = () => {
         const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
     };
-    
+
 
     const handlePlayAgain = () => {
         navigate("/mcqs")
@@ -104,9 +104,30 @@ const LeaderBoard = () => {
                             <DialogCloseTrigger />
                         </DialogContent>
                     </DialogRoot>) :
-                    (<Button colorScheme="teal" onClick={() => console.log('Play Again using Payment')}>
-                        Play Again Pay (5Rs)
-                    </Button>)
+                    (<DialogRoot>
+                        <DialogTrigger asChild>
+                            <Button colorScheme="teal" onClick={() => console.log('Play Again using Payment')}>
+                                Play Again Pay (5Rs)
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Ye feature abhi development me hai.</DialogTitle>
+                            </DialogHeader>
+                            <DialogBody>
+                                <p>
+                                    Tension mat lo, kal tumhe 3 credits mil jayenge😉.
+                                </p>
+                            </DialogBody>
+                            <DialogFooter>
+                                <DialogActionTrigger asChild>
+                                    <Button variant="outline">Thank You</Button>
+                                </DialogActionTrigger>
+                            </DialogFooter>
+                            <DialogCloseTrigger />
+                        </DialogContent>
+                    </DialogRoot>)
+
                 }
             </SimpleGrid>
 

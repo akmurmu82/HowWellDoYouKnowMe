@@ -34,6 +34,7 @@ app.post("/register", async (req, res) => {
     try {
         const { name, email, relation } = req.body
         const existingUser = await User.findOne({ name })
+        // console.log({ name, email, relation })
         if (!existingUser) {
             const newUser = new User({ name, email, relation })
             await newUser.save()

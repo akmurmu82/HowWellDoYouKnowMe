@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Box, VStack, Text, Button, Container, Heading } from '@chakra-ui/react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import PropTypes from 'prop-types';
 
 const Certificate = ({ name, score, timeTaken }) => {
     const certificateRef = useRef();
@@ -37,6 +38,13 @@ const Certificate = ({ name, score, timeTaken }) => {
             </VStack>
         </Container>
     );
+};
+
+Certificate.propTypes = {
+    name: PropTypes.string,
+    score: PropTypes.number,
+    timeTaken: PropTypes.number,
+
 };
 
 export default Certificate;
