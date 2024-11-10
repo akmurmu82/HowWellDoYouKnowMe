@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
-import { Box, VStack, Text, Image, HStack } from '@chakra-ui/react';
+import { Box, VStack, Text, HStack } from '@chakra-ui/react';
+import { Avatar } from './components/ui/avatar';
 
 const PlayerCard = ({ name, currentUser, index, score, credits, profilePic, timeTaken }) => {
+
     return (
         <HStack
             p={3}
@@ -13,7 +15,7 @@ const PlayerCard = ({ name, currentUser, index, score, credits, profilePic, time
             bg={index === 0 ? 'yellow.300' : index === 1 ? '#C0C0C0' : index === 2 ? '#B08D57' : 'gray.100'}
             textAlign="center"
         >
-            <Image w={20} borderRadius={"50%"} src={profilePic} />
+            <Avatar size="2xl" src={profilePic} />
             <VStack textAlign="left">
                 <Box>
                     <Text fontWeight="bold">

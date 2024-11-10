@@ -8,7 +8,8 @@ const userSchema = mongoose.Schema({
     score: { type: Number, default: 0 },
     timeTaken: { type: Number, default: 999 },
     credits: { type: Number, default: 3 },
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    // updatedAt
 })
 
 const User = mongoose.model("User", userSchema)

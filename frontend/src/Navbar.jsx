@@ -1,4 +1,6 @@
-import { Button, Heading, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { Button, Center, Heading, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { useState } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import {
     DrawerActionTrigger,
@@ -13,14 +15,57 @@ import {
     DrawerTrigger,
 } from "./components/ui/drawer"
 import { useNavigate } from 'react-router-dom';
+import {
+    FileInput,
+    FileUploadClearTrigger,
+    FileUploadRoot,
+} from "./components/ui/file-button"
+import { InputGroup } from "./components/ui/input-group"
+import { Avatar } from "./components/ui/avatar"
+import { LuFileUp } from "react-icons/lu"
+import { CloseButton } from "./components/ui/close-button"
 
 function Navbar({ title, timer, currentUser }) {
+    const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
+    const [isFileUploadOpen, setIsFileUploadOpen] = useState(false)
+    const [uploadedImg, setUploadedImg] = useState(null)
+    const [submitBtn, setSubmitBtn] = useState(null)
     const navigate = useNavigate()
     const { name, profilePic } = currentUser
     const handleLogOut = () => {
         localStorage.clear()
         console.log("logged out!", currentUser)
         navigate("/")
+    }
+
+    const handleChangeProfile = async () => {
+        // update user on backend
+        // Create FormData to send file and text data
+        console.log("started updating...")
+        const formData = new FormData();
+        formData.append("profilePic", uploadedImg); // Add image file
+        formData.append("name", name);
+
+        console.log("body:", formData)
+
+        try {
+            const response = await axios.patch(`${beBaseUrl}/update`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            console.log("Profile updated successfully:", response.data);
+        } catch (error) {
+            console.error("Error uploading file:", error);
+        }
+
+    }
+
+    const handleFileUploadSucces = (e) => {
+        setSubmitBtn(true)
+        console.log("uploaded file", e.files[0])
+        setUploadedImg(e.files[0])
     }
 
     return (
@@ -58,6 +103,39 @@ function Navbar({ title, timer, currentUser }) {
                                     null
                                 }
                             </VStack>
+                            <Center>
+                                <VStack>
+                                    <Text my={2}>My Profile</Text>
+                                    <Avatar name="Segun Adebayo" src={`${beBaseUrl}/{profilePic}`} />
+                                    {isFileUploadOpen ?
+                                        <FileUploadRoot gap="1" maxWidth="300px" onFileAccept={(e) => handleFileUploadSucces(e)}>
+                                            <InputGroup
+                                                w="full"
+                                                startElement={<LuFileUp />}
+                                                endElement={
+                                                    <FileUploadClearTrigger asChild>
+                                                        <CloseButton
+                                                            me="-1"
+                                                            size="xs"
+                                                            variant="plain"
+                                                            focusVisibleRing="inside"
+                                                            focusRingWidth="2px"
+                                                            pointerEvents="auto"
+                                                            color="fg.subtle"
+                                                        />
+                                                    </FileUploadClearTrigger>
+                                                }
+                                            >
+                                                <FileInput />
+                                            </InputGroup>
+                                            {submitBtn ? <Button onClick={() => handleChangeProfile()}>Submit</Button> : null}
+                                        </FileUploadRoot> :
+                                        <Text onClick={() => setIsFileUploadOpen(!isFileUploadOpen)}>Change Image</Text>
+                                    }
+                                    <Text>Name: <b>{name}</b></Text>
+                                    <Text>Relation: <b>{currentUser.relation}</b></Text>
+                                </VStack>
+                            </Center>
                         </DrawerBody>
                         <DrawerFooter>
                             <DrawerActionTrigger asChild>

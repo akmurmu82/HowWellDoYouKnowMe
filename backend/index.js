@@ -1,13 +1,26 @@
 const express = require("express")
 const cors = require("cors")
+const multer = require("multer")
+const path = require("path")
 const User = require("./models/userModel")
 const connectToDb = require("./config/db")
 const Question = require("./models/questionModel")
 require("dotenv").config()
 const cron = require('node-cron');
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/"); // Save files in the "uploads" folder
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+})
+
+const upload = multer({ storage })
+
 // Resetting credits of all the users back to 3 at midnight
-cron.schedule('0 0 * * *', async () => {
+cron.schedule('0 */6 * * *', async () => {
     try {
         await User.updateMany({}, { $set: { credits: 3 } });
         console.log("Credits reset to 3 for all users");
@@ -17,12 +30,14 @@ cron.schedule('0 0 * * *', async () => {
 });
 
 const port = process.env.PORT
+const beBaseUrl = process.env.BE_BASE_URL
 
 const app = express()
 
 // Middlewares
 app.use(express.json())
 app.use(cors())
+app.use("/uploads", express.static("uploads"));
 
 // Home route
 app.get("/", (req, res) => {
@@ -50,10 +65,15 @@ app.post("/register", async (req, res) => {
 })
 
 // Update route
-app.patch("/update", async (req, res) => {
+app.patch("/update", upload.single("profilePic"), async (req, res) => {
     try {
         const { name, ...updates } = req.body
-        console.log("res.body:", res.body)
+        console.log("res.body:", req.body)
+
+        // If a file is uploaded, set the profilePic path
+        if (req.file) {
+            updates.profilePic = `${beBaseUrl}/uploads/${req.file.filename}`; // Store the file path
+        }
 
         const existingUser = await User.findOneAndUpdate({ name }, updates, { new: true, runValidators: true })
         if (!existingUser) {
