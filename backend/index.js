@@ -47,11 +47,11 @@ app.get("/", (req, res) => {
 // Register route
 app.post("/register", async (req, res) => {
     try {
-        const { name, email, relation } = req.body
+        const { name, email, relation, password } = req.body
         const existingUser = await User.findOne({ name })
         // console.log({ name, email, relation })
         if (!existingUser) {
-            const newUser = new User({ name, email, relation })
+            const newUser = new User({ name, email, relation, password })
             await newUser.save()
             res.status(201).json({ message: "User created", user: newUser })
         } else {
@@ -60,6 +60,24 @@ app.post("/register", async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ message: "Error occured while creating the user.", error })
+        console.log(error)
+    }
+})
+
+// Login route
+app.post("/login", async (req, res) => {
+    try {
+        const { name } = req.body
+        const existingUser = await User.findOne({ name })
+        // console.log({ name, email, relation })
+        if (!existingUser) {
+            res.status(404).json({ message: "User not found!" })
+        } else {
+            res.status(201).json({ message: "Login successful.", user: existingUser })
+        }
+
+    } catch (error) {
+        res.status(500).json({ message: "Error occured while loggin in!", error })
         console.log(error)
     }
 })

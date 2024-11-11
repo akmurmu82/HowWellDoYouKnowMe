@@ -1,4 +1,4 @@
-import { Button, Center, Heading, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, HStack, Spinner, Text, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -30,6 +30,7 @@ function Navbar({ title, timer, currentUser }) {
     const [isFileUploadOpen, setIsFileUploadOpen] = useState(false)
     const [uploadedImg, setUploadedImg] = useState(null)
     const [submitBtn, setSubmitBtn] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
     const { name, profilePic } = currentUser
     const handleLogOut = () => {
@@ -39,6 +40,7 @@ function Navbar({ title, timer, currentUser }) {
     }
 
     const handleChangeProfile = async () => {
+        setIsLoading(true)
         // update user on backend
         // Create FormData to send file and text data
         console.log("started updating...")
@@ -49,6 +51,7 @@ function Navbar({ title, timer, currentUser }) {
         console.log("body:", formData)
 
         try {
+
             const response = await axios.patch(`${beBaseUrl}/update`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -58,6 +61,8 @@ function Navbar({ title, timer, currentUser }) {
             console.log("Profile updated successfully:", response.data);
         } catch (error) {
             console.error("Error uploading file:", error);
+        } finally {
+            setIsLoading(false)
         }
 
     }
@@ -80,7 +85,7 @@ function Navbar({ title, timer, currentUser }) {
                 <DrawerRoot>
                     <DrawerBackdrop />
                     <DrawerTrigger asChild>
-                        <Image w={10} borderRadius={"50%"} src={profilePic} />
+                        <Avatar name={name} src={profilePic} />
                     </DrawerTrigger>
                     <DrawerContent>
                         <DrawerHeader>
@@ -106,7 +111,9 @@ function Navbar({ title, timer, currentUser }) {
                             <Center>
                                 <VStack>
                                     <Text my={2}>My Profile</Text>
-                                    <Avatar name="Segun Adebayo" src={`${beBaseUrl}/{profilePic}`} />
+                                    <Box>
+                                        <Avatar src={`${beBaseUrl}/{profilePic}`} />
+                                    </Box>
                                     {isFileUploadOpen ?
                                         <FileUploadRoot gap="1" maxWidth="300px" onFileAccept={(e) => handleFileUploadSucces(e)}>
                                             <InputGroup
@@ -128,7 +135,7 @@ function Navbar({ title, timer, currentUser }) {
                                             >
                                                 <FileInput />
                                             </InputGroup>
-                                            {submitBtn ? <Button onClick={() => handleChangeProfile()}>Submit</Button> : null}
+                                            {submitBtn ? <Button onClick={() => handleChangeProfile()}>Change</Button> : null}
                                         </FileUploadRoot> :
                                         <Text onClick={() => setIsFileUploadOpen(!isFileUploadOpen)}>Change Image</Text>
                                     }

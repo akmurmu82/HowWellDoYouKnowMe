@@ -1,4 +1,4 @@
-import { Box, Button, Center, Container, Fieldset, Heading, HStack, Image, Input, Spinner, Stack, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Center, Container, Fieldset, Heading, HStack, IconButton, Image, Input, Spinner, Stack, Text, VStack } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Field } from './components/ui/field';
@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
 import { Toaster, toaster } from "./components/ui/toaster"
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
+import { InputGroup } from './components/ui/input-group';
+import { FaRegEye } from "react-icons/fa";
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL;
 
 function LandingPage() {
@@ -18,6 +20,7 @@ function LandingPage() {
     console.log(currentUser, Boolean(currentUser.name))
     const navigate = useNavigate()
     const [isLoading, setLoading] = useState(false)
+    const [passwordVisible, setPasswordVisible] = useState(false)
     const [formData, setFormData] = useState(currentUser)
     const [formSubmitted, setFormSubmitted] = useState(false)
 
@@ -115,9 +118,14 @@ function LandingPage() {
                                         <Field label="Name" value={formData.name} invalid={formSubmitted & !formData.name} errorText="Oye, apna naam dalo yaha!">
                                             <Input variant={"subtle"} name="name" placeholder="Tumhara naam..." onChange={handleChange} />
                                         </Field>
+                                        <Field label="Password" value={formData.password} invalid={formSubmitted & !formData.password} errorText="8 Letter ka password!">
+                                            <InputGroup flex="1" endElement={<IconButton onClick={() => setPasswordVisible(!passwordVisible)} aria-label="Search database"><FaRegEye /></IconButton>}>
+                                                <Input variant={"subtle"} name="password" type={passwordVisible ? "text" : "password"} placeholder="Achcha sa password dalo..." onChange={handleChange} />
+                                            </InputGroup>
+                                        </Field>
                                         <Field label="Relation">
                                             <NativeSelectRoot variant={"subtle"}>
-                                                <NativeSelectField name="relation" items={["Sibling", "Friend", "Cousine", "Uncle", "Aunt", "Niece", "Nephew", "Unknown"]} value={formData.relation} onChange={handleChange} />
+                                                <NativeSelectField name="relation" items={["Sibling", "Friend", "Cousine", "Uncle", "Aunt", "Niece", "Nephew", "Unknown", "Admin"]} value={formData.relation} onChange={handleChange} />
                                             </NativeSelectRoot>
                                         </Field>
                                         <Field label="Email" value={formData.email} invalid={formSubmitted & !formData.email} errorText="Ab ye bhi daal hi do na..">
