@@ -3,7 +3,6 @@ import { Box, VStack, Text, HStack } from '@chakra-ui/react';
 import { Avatar } from './components/ui/avatar';
 
 const PlayerCard = ({ name, currentUser, index, score, credits, profilePic, timeTaken }) => {
-    console.log(profilePic)
 
     return (
         <HStack

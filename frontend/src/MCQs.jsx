@@ -19,6 +19,7 @@ import {
 import correctSoundFile from './assets/correct-answer.mp3';
 import wrongSoundFile from './assets/wrong-sound.mp3';
 import submitSoundFile from './assets/submit-sound.mp3';
+import updateUser from './utils/updateUser'
 
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
 
@@ -41,11 +42,6 @@ export default function MCQs() {
 
     const submitSound = new Audio(submitSoundFile);
     submitSound.volume = 0.3; // Adjusts the volume to 70%
-
-    const updateUser = (updatedUser) => {
-        serCurrentUser(updatedUser)
-        localStorage.setItem("currentUser", JSON.stringify(updatedUser))
-    }
 
     const fetchAllQuestions = useCallback(async () => {
         try {
@@ -91,7 +87,7 @@ export default function MCQs() {
         try {
             await axios.patch(`${beBaseUrl}/update`, updatedUser);
             updateUser(updatedUser)
-            // localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+            serCurrentUser(updatedUser)
             navigate("/leaderboard");
         } catch (error) {
             toaster.create({

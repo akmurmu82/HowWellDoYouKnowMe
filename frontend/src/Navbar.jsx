@@ -1,4 +1,4 @@
-import { Box, Button, Center, Heading, HStack, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -24,6 +24,8 @@ import { InputGroup } from "./components/ui/input-group"
 import { Avatar } from "./components/ui/avatar"
 import { LuFileUp } from "react-icons/lu"
 import { CloseButton } from "./components/ui/close-button"
+import updateUser from './utils/updateUser';
+import { toaster } from './components/ui/toaster';
 
 function Navbar({ title, timer, currentUser }) {
     const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
@@ -58,11 +60,21 @@ function Navbar({ title, timer, currentUser }) {
                 },
             });
 
-            console.log("Profile updated successfully:", response.data);
+            console.log("Profile updated successfully:", response);
+            if (response.status == 200) {
+                toaster.create({
+                    title: "Image Update.",
+                    description: "Lag gayi tumhari picture😉.",
+                    duration: 2000,
+                })
+                updateUser(response.data.user)
+            }
         } catch (error) {
             console.error("Error uploading file:", error);
         } finally {
             setIsLoading(false)
+            setSubmitBtn(false)
+            setIsFileUploadOpen(!isFileUploadOpen)
         }
 
     }
@@ -112,7 +124,7 @@ function Navbar({ title, timer, currentUser }) {
                                 <VStack>
                                     <Text my={2}>My Profile</Text>
                                     <Box>
-                                        <Avatar src={`${beBaseUrl}/{profilePic}`} />
+                                        <Avatar src={profilePic} />
                                     </Box>
                                     {isFileUploadOpen ?
                                         <FileUploadRoot gap="1" maxWidth="300px" onFileAccept={(e) => handleFileUploadSucces(e)}>
