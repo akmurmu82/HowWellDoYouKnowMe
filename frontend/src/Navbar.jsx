@@ -64,7 +64,7 @@ function Navbar({ title, timer, currentUser }) {
             if (response.status == 200) {
                 toaster.create({
                     title: "Image Update.",
-                    description: "Lag gayi tumhari picture😉.",
+                    description: "Lag gayi tumhari picture😉.Page refresh karo🔃",
                     duration: 2000,
                 })
                 updateUser(response.data.user)
@@ -128,28 +128,30 @@ function Navbar({ title, timer, currentUser }) {
                                     </Box>
                                     {isFileUploadOpen ?
                                         <FileUploadRoot gap="1" maxWidth="300px" onFileAccept={(e) => handleFileUploadSucces(e)}>
-                                            <InputGroup
-                                                w="full"
-                                                startElement={<LuFileUp />}
-                                                endElement={
-                                                    <FileUploadClearTrigger asChild>
-                                                        <CloseButton
-                                                            me="-1"
-                                                            size="xs"
-                                                            variant="plain"
-                                                            focusVisibleRing="inside"
-                                                            focusRingWidth="2px"
-                                                            pointerEvents="auto"
-                                                            color="fg.subtle"
-                                                        />
-                                                    </FileUploadClearTrigger>
-                                                }
-                                            >
-                                                <FileInput />
-                                            </InputGroup>
-                                            {submitBtn ? <Button onClick={() => handleChangeProfile()}>Change</Button> : null}
+                                            <VStack>
+                                                <InputGroup
+                                                    w="full"
+                                                    startElement={<LuFileUp />}
+                                                    endElement={
+                                                        <FileUploadClearTrigger asChild>
+                                                            <CloseButton
+                                                                me="-1"
+                                                                size="xs"
+                                                                variant="plain"
+                                                                focusVisibleRing="inside"
+                                                                focusRingWidth="2px"
+                                                                pointerEvents="auto"
+                                                                color="fg.subtle"
+                                                            />
+                                                        </FileUploadClearTrigger>
+                                                    }
+                                                >
+                                                    <FileInput />
+                                                </InputGroup>
+                                                {submitBtn ? <Button onClick={() => handleChangeProfile()}>Change</Button> : null}
+                                            </VStack>
                                         </FileUploadRoot> :
-                                        <Text onClick={() => setIsFileUploadOpen(!isFileUploadOpen)}>Change Image</Text>
+                                        <Text disabled={isLoading} onClick={() => setIsFileUploadOpen(!isFileUploadOpen)}>Change</Text>
                                     }
                                     <Text>Name: <b>{name}</b></Text>
                                     <Text>Relation: <b>{currentUser.relation}</b></Text>

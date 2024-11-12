@@ -81,8 +81,8 @@ export default function MCQs() {
         let score = questions.reduce((acc, question) => {
             return acc + (selectedAnswers[question._id] === question.correctAnswer ? 1 : 0);
         }, 0);
-
-        const updatedUser = { ...currentUser, score, timeTaken: 90 - timer, credits: currentUser.credits - 1 };
+        const updatedUser = { ...currentUser, score, timeTaken: 120 - timer, credits: currentUser.credits - 1 };
+        console.log(score, timer, updatedUser.timeTaken)
 
         try {
             await axios.patch(`${beBaseUrl}/update`, updatedUser);
