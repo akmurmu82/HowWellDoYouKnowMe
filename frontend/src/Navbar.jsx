@@ -63,9 +63,9 @@ function Navbar({ title, timer, currentUser }) {
             console.log("Profile updated successfully:", response);
             if (response.status == 200) {
                 toaster.create({
-                    title: "Image Update.",
+                    title: "Image Updated.",
                     description: "Lag gayi tumhari picture😉.Page refresh karo🔃",
-                    duration: 2000,
+                    duration: 3000,
                 })
                 updateUser(response.data.user)
             }

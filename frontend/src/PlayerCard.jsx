@@ -1,11 +1,16 @@
 import PropTypes from 'prop-types';
-import { Box, VStack, Text, HStack } from '@chakra-ui/react';
+import { Box, VStack, Text, HStack, Button } from '@chakra-ui/react';
+import { CiTrash } from "react-icons/ci";
+import { SlPencil } from "react-icons/sl";
+import { PiHandCoinsLight } from "react-icons/pi";
 import { Avatar } from './components/ui/avatar';
 
 const PlayerCard = ({ name, currentUser, index, score, credits, profilePic, timeTaken }) => {
+    const isAdmin = Boolean(currentUser.relation === "Admin")
+    console.log(isAdmin)
 
     return (
-        <HStack
+        <VStack
             p={3}
             color={"black"}
             justifyContent={"space-around"}
@@ -15,18 +20,34 @@ const PlayerCard = ({ name, currentUser, index, score, credits, profilePic, time
             bg={index === 0 ? 'yellow.300' : index === 1 ? '#C0C0C0' : index === 2 ? '#B08D57' : 'gray.100'}
             textAlign="center"
         >
-            <Avatar size="2xl" src={profilePic} />
-            <VStack textAlign="left">
-                <Box>
-                    <Text fontWeight="bold">
-                        {index + 1 === 1 ? '1st ' : `${index + 1}th `} {name}
-                    </Text>
-                    <Text>Score: {score}</Text>
-                    <Text>Time Taken: {timeTaken}s</Text>
-                    <Text>Credits remaining: {credits}s</Text>
-                </Box>
-            </VStack>
-        </HStack>
+            <HStack>
+                <Avatar size="2xl" src={profilePic} />
+                <VStack textAlign="left">
+                    <Box>
+                        <Text fontWeight="bold">
+                            {index + 1 === 1 ? '1st ' : `${index + 1}th `} {name}
+                        </Text>
+                        <Text>Score: {score}</Text>
+                        <Text>Time Taken: {timeTaken}s</Text>
+                        <Text>Credits remaining: {credits}s</Text>
+                    </Box>
+                    {/* Conditionally render Update button if currentUser is Admin */}
+                </VStack>
+            </HStack>
+            {isAdmin && (
+                <HStack>
+                    <Button colorPalette="teal" variant="outline">
+                        Update <SlPencil />
+                    </Button>
+                    <Button colorPalette="teal" variant="outline">
+                        Give Credits <PiHandCoinsLight />
+                    </Button>
+                    <Button colorPalette="teal" variant="outline">
+                        Delete <CiTrash />
+                    </Button>
+                </HStack>
+            )}
+        </VStack>
     )
 }
 

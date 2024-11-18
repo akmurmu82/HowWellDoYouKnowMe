@@ -20,7 +20,7 @@ function LandingPage() {
     console.log(currentUser, Boolean(currentUser.name))
     const navigate = useNavigate()
     const [isLoading, setLoading] = useState(false)
-    const [passwordVisible, setPasswordVisible] = useState(false)
+    // const [passwordVisible, setPasswordVisible] = useState(false)
     const [formData, setFormData] = useState(currentUser)
     const [formSubmitted, setFormSubmitted] = useState(false)
 
@@ -89,12 +89,12 @@ function LandingPage() {
 
                     {/* Description */}
                     <Box textAlign="center" >
-                        <Heading fontSize="2xl" color="pink.500" mb={3}>
-                            Welcome to &ldquo;How Well Do You Know Me?&ldquo;
+                        <Heading fontSize="2xl" color="yellow.500" mb={3}>
+                            <Text color="#fff">Welcome to</Text>
+                            <Text size="sm">&ldquo;How Well Do You Know Me?&ldquo;</Text>
                         </Heading>
                         <Text fontSize="lg" color="#fff">
-                            the ultimate friend test! Here, I’ll find out who’s been paying attention and who’s just been nodding along. With questions that range from the easy (What’s my favorite snack?) to the downright tricky (What would I save in a fire?), this app is your chance to prove just how well you know me.</Text>
-
+                            The ultimate friend test! Here, I’ll find out who’s been paying attention and who’s just been nodding along. With questions that range from the easy (What’s my favorite snack?) to the downright tricky (What would I save in a fire?), this app is your chance to prove just how well you know me.</Text>
                         <Text mt={4} fontSize="md" color="#fff">
                             Ready to uncover some secrets and share a few laughs? Let’s get started!                        </Text>
                         {/* Form */}
@@ -118,11 +118,11 @@ function LandingPage() {
                                         <Field label="Name" value={formData.name} invalid={formSubmitted & !formData.name} errorText="Oye, apna naam dalo yaha!">
                                             <Input variant={"subtle"} name="name" placeholder="Tumhara naam..." onChange={handleChange} />
                                         </Field>
-                                        <Field label="Password" value={formData.password} invalid={formSubmitted & !formData.password} errorText="8 Letter ka password!">
+                                        {/* <Field label="Password" value={formData.password} invalid={formSubmitted & !formData.password} errorText="8 Letter ka password!">
                                             <InputGroup flex="1" endElement={<IconButton onClick={() => setPasswordVisible(!passwordVisible)} aria-label="Search database"><FaRegEye /></IconButton>}>
                                                 <Input variant={"subtle"} name="password" type={passwordVisible ? "text" : "password"} placeholder="Achcha sa password dalo..." onChange={handleChange} />
                                             </InputGroup>
-                                        </Field>
+                                        </Field> */}
                                         <Field label="Relation">
                                             <NativeSelectRoot variant={"subtle"}>
                                                 <NativeSelectField name="relation" items={["Sibling", "Friend", "Cousine", "Uncle", "Aunt", "Niece", "Nephew", "Unknown", "Admin"]} value={formData.relation} onChange={handleChange} />
