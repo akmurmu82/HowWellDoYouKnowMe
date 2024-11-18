@@ -154,7 +154,7 @@ export default function MCQs() {
             <Navbar title="MCQs" timer={timer} currentUser={currentUser} />
             <VStack spacing={6} align="stretch" my={5} mt={20}>
                 {questions.map((question) => (
-                    <Box key={question._id} p={6} borderWidth={1} borderRadius="lg" bg="white" color="black">
+                    <Box key={question._id} p={3} borderWidth={1} borderRadius="lg" bg="white" color="black">
                         <Text mb={4} fontWeight="bold">{question.questionText}</Text>
                         <SimpleGrid columns={2} gap={2}>
                             {question.options.map((option) => {
@@ -170,8 +170,15 @@ export default function MCQs() {
                                         onClick={() => handleAnswerClick(question._id, option)}
                                         _hover={{ bg: isSelected ? bgColor : 'gray.300' }}
                                         disabled={!!selectedAnswers[question._id]}
+                                        whiteSpace="normal" // Allow text wrapping
+                                        textAlign="center"  // Center align the text
+                                        padding="4"         // Adjust padding for better spacing
+                                        overflow="hidden"   // Prevent any overflowing text from being visible
+                                    
                                     >
-                                        {option}
+                                        {/* <Text> */}
+                                            {option}
+                                        {/* </Text> */}
                                     </Button>
                                 );
                             })}
