@@ -36,13 +36,13 @@ const PlayerCard = ({ name, currentUser, index, score, credits, profilePic, time
             </HStack>
             {isAdmin && (
                 <HStack>
-                    <Button colorPalette="teal" variant="outline">
+                    <Button size={'sm'} colorPalette="teal" variant="subtle">
                         Update <SlPencil />
                     </Button>
-                    <Button colorPalette="teal" variant="outline">
+                    <Button size={'sm'} colorPalette="teal" variant="subtle">
                         Give Credits <PiHandCoinsLight />
                     </Button>
-                    <Button colorPalette="teal" variant="outline">
+                    <Button size={'sm'} colorPalette="teal" variant="subtle">
                         Delete <CiTrash />
                     </Button>
                 </HStack>

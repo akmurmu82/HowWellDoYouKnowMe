@@ -114,7 +114,7 @@ export default function MCQs() {
     return (
         <Container maxW="container.md" mt={8}>
             <DialogRoot defaultOpen={!!currentUser.name} lazyMount size={'lg'} open={isDialogOpen} onOpenChange={() => currentUser.credits <= 0 ? navigate("/leaderboard") : null}>
-                <DialogContent>
+                <DialogContent color="black">
                     <DialogHeader>
                         {currentUser.credits <= 0 ? (
                             <DialogTitle>Credits nhi bache ab 🥲</DialogTitle>

@@ -11,8 +11,8 @@ import { useEffect, useState } from 'react';
 import { Toaster, toaster } from "./components/ui/toaster"
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
-import { InputGroup } from './components/ui/input-group';
-import { FaRegEye } from "react-icons/fa";
+// import { InputGroup } from './components/ui/input-group';
+// import { FaRegEye } from "react-icons/fa";
 const beBaseUrl = import.meta.env.VITE_BE_BASE_URL;
 
 function LandingPage() {
@@ -71,7 +71,7 @@ function LandingPage() {
     }
 
     return (
-        <>
+        <Box bg="black">
             <Navbar title="HOME" currentUser={currentUser} />
             <Toaster />
             {/* Content Section */}
@@ -114,7 +114,7 @@ function LandingPage() {
                                             Please provide your contact details below.
                                         </Fieldset.HelperText>
                                     </Stack>
-                                    <Fieldset.Content color={'#fff'}>
+                                    <Fieldset.Content>
                                         <Field label="Name" value={formData.name} invalid={formSubmitted & !formData.name} errorText="Oye, apna naam dalo yaha!">
                                             <Input variant={"subtle"} name="name" placeholder="Tumhara naam..." onChange={handleChange} />
                                         </Field>
@@ -132,7 +132,7 @@ function LandingPage() {
                                             <Input variant={"subtle"} name="email" placeholder="jaise ki aman@gmail.com" onChange={handleChange} />
                                         </Field>
                                     </Fieldset.Content>
-                                    <Button type="submit" onClick={handleSubmit} mt={4} bg="pink" disabled={isLoading}>
+                                    <Button type="submit" onClick={handleSubmit} color="black" mt={4} bg="pink" disabled={isLoading}>
                                         {isLoading && <Spinner size="md" />}
                                         Sign In...
                                     </Button>
@@ -148,7 +148,7 @@ function LandingPage() {
                 </VStack>
             </Container>
 
-        </>
+        </Box>
     );
 }
 

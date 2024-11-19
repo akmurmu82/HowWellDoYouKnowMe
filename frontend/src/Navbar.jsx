@@ -86,7 +86,7 @@ function Navbar({ title, timer, currentUser }) {
     }
 
     return (
-        <HStack bg={'black'} mx={"auto"} w={'100%'} justifyContent={"space-between"} position={"fixed"} zIndex={9} top={0} left={0} textAlign="center" p={4}>
+        <HStack bg={'black'} color="#fff" mx={"auto"} w={'100%'} justifyContent={"space-between"} position={"fixed"} zIndex={9} top={0} left={0} textAlign="center" p={4}>
             <Heading size="md" textAlign="center">
                 {title}
             </Heading>

@@ -76,7 +76,7 @@ const LeaderBoard = () => {
                     Share on WhatsApp
                 </Button>
                 <Button colorScheme="purple" onClick={() => setShowCertificate(true)}>
-                    Download Certificate
+                    {showCertificate ? "Certificate generated. Neeche Scroll karo👇" : "Download Certificate"}
                 </Button>
                 {currentUser.credits > 0 ?
                     (<DialogRoot>
