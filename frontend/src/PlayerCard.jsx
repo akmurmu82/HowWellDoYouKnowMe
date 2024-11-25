@@ -20,13 +20,11 @@ const PlayerCard = ({ _id, name, currentUser, index, score, credits, profilePic,
         try {
             let res = await axios.delete(`${beBaseUrl}/players/delete/${_id}`);
             if (res.status == 200) {
-                // setPlayers(res.data)
-                console.log("deleted")
                 toaster.create({
-                    title: "Ho gya",
-                    description: "Thanks for registering.",
-                    duration: 2000,
-                    // placement:"top"
+                    title: `${res.data.player.name} remove ho gya.`,
+                    description: "Refresh to see the updates",
+                    duration: 4000,
+                    type: "success"
                 })
             }
         } catch (error) {
@@ -48,7 +46,6 @@ const PlayerCard = ({ _id, name, currentUser, index, score, credits, profilePic,
                     type: 'success',
                 })
             } else {
-                alert(`Error: ${response.data.message}`);
                 toaster.create({
                     title: `Nahi hua bhai...`,
                     type: 'warning',
@@ -63,54 +60,74 @@ const PlayerCard = ({ _id, name, currentUser, index, score, credits, profilePic,
                 type: 'error',
                 description: `${error}`,
                 duration: 4000,
-            })        }
+            })
+        }
     };
 
 
     return (
         <VStack
-            p={3}
+            p={4}
             color={"black"}
             justifyContent={"space-around"}
             borderWidth={currentUser.name === name ? 5 : 1}
             borderColor={currentUser.name === name ? "red" : ''}
-            borderRadius="md"
-            bg={index === 0 ? 'yellow.300' : index === 1 ? '#C0C0C0' : index === 2 ? '#B08D57' : 'gray.100'}
+            borderRadius="lg"
+            bg={index === 0 ? 'yellow.300' : index === 1 ? '#C0C0C0' : index === 2 ? '#B08D57' : 'gray.50'}
             textAlign="center"
+            boxShadow="lg" // Adding box-shadow
+            transition="transform 0.2s, box-shadow 0.2s" // Smooth hover effect
+            _hover={{
+                transform: "scale(1.03)",
+                boxShadow: "xl",
+            }}
         >
             <Toaster />
-            <HStack>
+            <HStack w="100%" justifyContent={"space-around"}>
                 <Avatar size="2xl" src={profilePic} />
                 <VStack textAlign="left">
                     <Box>
-                        <Text fontWeight="bold">
+                        <Text fontWeight="extrabold" fontSize="xl" color="blue.800"> {/* Catchy font */}
                             {index + 1 === 1 ? '1st ' : `${index + 1}th `} {name}
                         </Text>
-                        <Text>Score: {score}</Text>
-                        <Text>Time Taken: {timeTaken}s</Text>
-                        <Text>Credits remaining: {credits}s</Text>
+                        <Text fontWeight="medium" fontSize="md" color="gray.700">
+                            Score: <span style={{ color: "green.600", fontWeight: "bold" }}>{score}</span>
+                        </Text>
+                        <Text fontWeight="medium" fontSize="md" color="gray.700">
+                            Time Taken: <span style={{ color: "purple.600", fontWeight: "bold" }}>{timeTaken}s</span>
+                        </Text>
+                        <Text fontWeight="medium" fontSize="md" color="gray.700">
+                            Credits remaining: <span style={{ color: "orange.600", fontWeight: "bold" }}>{credits}s</span>
+                        </Text>
                     </Box>
-                    {/* Conditionally render Update button if currentUser is Admin */}
                 </VStack>
             </HStack>
             {isAdmin && (
-                <SimpleGrid columns={2} gap={2}>
-                    <Button size={'sm'} colorPalette="white" variant="subtle">
+                <SimpleGrid columns={2} gap={3} w="100%">
+                    <Button size="md" colorScheme="teal" variant="solid">
                         View Player <SlUser />
                     </Button>
-                    <Button size={'sm'} bg="orange.800" colorPalette="white" variant="subtle" onClick={(_id) => handleGiveCredits(_id)}>
+                    <Button size="md" bg="orange.800" color="white" _hover={{ bg: "orange.700" }} onClick={() => handleGiveCredits()}>
                         Edit Player <PiHandCoinsLight />
                     </Button>
-                    <Button size={'sm'} bg="green.800" colorPalette="white" variant="subtle" onClick={(_id) => handleGiveCredits(_id)}>
+                    <Button size="md" bg="green.800" color="white" _hover={{ bg: "green.700" }} onClick={() => handleGiveCredits()}>
                         Give Credits <PiHandCoinsLight />
                     </Button>
-                    <Button isLoading={isLoading} bg="red.500" size={'sm'} colorPalette="white" variant="subtle" onClick={(_id) => handleDeletePlayer(_id)}>
-                        Remove Player<CiTrash />
+                    <Button
+                        isLoading={isLoading}
+                        bg="red.500"
+                        color="white"
+                        _hover={{ bg: "red.400" }}
+                        size="md"
+                        onClick={() => handleDeletePlayer()}
+                    >
+                        Remove Player <CiTrash />
                     </Button>
                 </SimpleGrid>
             )}
         </VStack>
-    )
+    );
+
 }
 
 export default PlayerCard;
