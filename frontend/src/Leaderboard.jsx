@@ -65,8 +65,8 @@ const LeaderBoard = () => {
                 ) :
                     players.length === 0 ? (
                         <Text>No players to display</Text>
-                    ) : (players.map(({ name, relation, score, credits, profilePic, timeTaken }, index) => (
-                        <PlayerCard key={index} currentUser={currentUser} relation={relation} index={index} name={name} score={score} credits={credits} profilePic={profilePic} timeTaken={timeTaken} />
+                    ) : (players.map(({ _id, name, relation, score, credits, profilePic, timeTaken }, index) => (
+                        <PlayerCard key={index} currentUser={currentUser} relation={relation} index={index} _id={_id} name={name} score={score} credits={credits} profilePic={profilePic} timeTaken={timeTaken} />
                     )
                     ))}
             </SimpleGrid>

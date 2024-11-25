@@ -118,7 +118,7 @@ app.get('/questions', async (req, res) => {
     }
 });
 
-// Route to get all questions
+// Route to get all players
 app.get('/players', async (req, res) => {
     try {
         const players = await User.find().sort({ score: -1 }); // Fetch all players from the database
@@ -128,6 +128,45 @@ app.get('/players', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' }); // Handle errors
     }
 });
+
+// Route to delete player
+app.delete('/players/delete/:id', async (req, res) => {
+    const id = req.params.id
+    try {
+        const deletedPlayer = await User.findByIdAndDelete(id)
+        if (!deletedPlayer) {
+            return res.status(404).json({ message: 'Player not found' }); // Handle case where player does not exist
+        }
+        res.status(200).json({ message: 'Player deleted successfully', player: deletedPlayer });
+    } catch (error) {
+        console.error('Error fetching players:', error);
+        res.status(500).json({ message: 'Internal server error' }); // Handle errors
+    }
+});
+
+// Route to give credits to a player
+app.put('/players/give-credits/:id', async (req, res) => {
+    try {
+        const playerId = req.params.id; // Get the player ID from the route parameters
+        
+        // Find the player by ID and increment their credits by 1 (or any desired amount)
+        const updatedPlayer = await User.findByIdAndUpdate(
+            playerId, 
+            { $inc: { credits: 1 } }, // Increment the 'credits' field by 1
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedPlayer) {
+            return res.status(404).json({ message: 'Player not found' });
+        }
+
+        res.status(200).json({ message: 'Credits added successfully', player: updatedPlayer });
+    } catch (error) {
+        console.error('Error updating player credits:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 
 app.listen(port, async () => {
     try {

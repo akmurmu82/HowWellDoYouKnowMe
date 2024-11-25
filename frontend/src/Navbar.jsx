@@ -44,8 +44,6 @@ function Navbar({ title, timer, currentUser }) {
     const handleChangeProfile = async () => {
         setIsLoading(true)
         // update user on backend
-        // Create FormData to send file and text data
-        console.log("started updating...")
         const formData = new FormData();
         formData.append("profilePic", uploadedImg); // Add image file
         formData.append("name", name);

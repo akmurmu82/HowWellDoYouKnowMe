@@ -4,10 +4,48 @@ import { CiTrash } from "react-icons/ci";
 import { SlPencil } from "react-icons/sl";
 import { PiHandCoinsLight } from "react-icons/pi";
 import { Avatar } from './components/ui/avatar';
+import axios from 'axios';
+import { useState } from 'react';
+const beBaseUrl = import.meta.env.VITE_BE_BASE_URL
 
-const PlayerCard = ({ name, currentUser, index, score, credits, profilePic, timeTaken }) => {
+const PlayerCard = ({ _id, name, currentUser, index, score, credits, profilePic, timeTaken }) => {
     const isAdmin = Boolean(currentUser.relation === "Admin")
-    console.log(isAdmin)
+    const [isLoading, setLoading] = useState(false)
+    // console.log(isAdmin)
+
+    const handleDeletePlayer = async () => {
+        console.log(_id)
+        setLoading(true)
+        try {
+            let res = await axios.delete(`${beBaseUrl}/players/delete/${_id}`);
+            if (res.status == 200) {
+                // setPlayers(res.data)
+                console.log("deleted")
+            }
+        } catch (error) {
+            console.error("Error deleting players!", error);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleGiveCredits = async () => {
+        try {
+            const response = await axios.put(`${beBaseUrl}/players/give-credits/${_id}`);
+
+            //   const data = await response.json();
+
+            if (response.status == 200) {
+                alert(`Credits added successfully to ${response.data.player.name}`);
+            } else {
+                alert(`Error: ${response.data.message}`);
+            }
+        } catch (error) {
+            console.error('Error giving credits:', error);
+            alert('An unexpected error occurred');
+        }
+    };
+
 
     return (
         <VStack
@@ -39,10 +77,10 @@ const PlayerCard = ({ name, currentUser, index, score, credits, profilePic, time
                     <Button size={'sm'} colorPalette="teal" variant="subtle">
                         Update <SlPencil />
                     </Button>
-                    <Button size={'sm'} colorPalette="teal" variant="subtle">
+                    <Button size={'sm'} colorPalette="teal" variant="subtle" onClick={(_id) => handleGiveCredits(_id)}>
                         Give Credits <PiHandCoinsLight />
                     </Button>
-                    <Button size={'sm'} colorPalette="teal" variant="subtle">
+                    <Button isLoading={isLoading} size={'sm'} colorPalette="teal" variant="subtle" onClick={(_id) => handleDeletePlayer(_id)}>
                         Delete <CiTrash />
                     </Button>
                 </HStack>
@@ -55,6 +93,7 @@ export default PlayerCard;
 
 PlayerCard.propTypes = {
     currentUser: PropTypes.object,
+    _id: PropTypes.string,
     name: PropTypes.string,
     index: PropTypes.number,
     score: PropTypes.number,
