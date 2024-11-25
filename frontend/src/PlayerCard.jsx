@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
-import { Box, VStack, Text, HStack, Button } from '@chakra-ui/react';
+import { Box, VStack, Text, HStack, Button, SimpleGrid } from '@chakra-ui/react';
 import { CiTrash } from "react-icons/ci";
-import { SlPencil } from "react-icons/sl";
+import { SlUser } from "react-icons/sl";
+import { Toaster, toaster } from "./components/ui/toaster"
 import { PiHandCoinsLight } from "react-icons/pi";
 import { Avatar } from './components/ui/avatar';
 import axios from 'axios';
@@ -21,6 +22,12 @@ const PlayerCard = ({ _id, name, currentUser, index, score, credits, profilePic,
             if (res.status == 200) {
                 // setPlayers(res.data)
                 console.log("deleted")
+                toaster.create({
+                    title: "Ho gya",
+                    description: "Thanks for registering.",
+                    duration: 2000,
+                    // placement:"top"
+                })
             }
         } catch (error) {
             console.error("Error deleting players!", error);
@@ -33,17 +40,30 @@ const PlayerCard = ({ _id, name, currentUser, index, score, credits, profilePic,
         try {
             const response = await axios.put(`${beBaseUrl}/players/give-credits/${_id}`);
 
-            //   const data = await response.json();
-
             if (response.status == 200) {
-                alert(`Credits added successfully to ${response.data.player.name}`);
+                toaster.create({
+                    title: `${response.data.player.name} ko credits de diye.`,
+                    description: `Refresh to see the updated players`,
+                    duration: 4000,
+                    type: 'success',
+                })
             } else {
                 alert(`Error: ${response.data.message}`);
+                toaster.create({
+                    title: `Nahi hua bhai...`,
+                    type: 'warning',
+                    description: `${response.data.message}`,
+                    duration: 4000,
+                })
             }
         } catch (error) {
             console.error('Error giving credits:', error);
-            alert('An unexpected error occurred');
-        }
+            toaster.create({
+                title: `Error aa gaya bhai...`,
+                type: 'error',
+                description: `${error}`,
+                duration: 4000,
+            })        }
     };
 
 
@@ -58,6 +78,7 @@ const PlayerCard = ({ _id, name, currentUser, index, score, credits, profilePic,
             bg={index === 0 ? 'yellow.300' : index === 1 ? '#C0C0C0' : index === 2 ? '#B08D57' : 'gray.100'}
             textAlign="center"
         >
+            <Toaster />
             <HStack>
                 <Avatar size="2xl" src={profilePic} />
                 <VStack textAlign="left">
@@ -73,17 +94,20 @@ const PlayerCard = ({ _id, name, currentUser, index, score, credits, profilePic,
                 </VStack>
             </HStack>
             {isAdmin && (
-                <HStack>
-                    <Button size={'sm'} colorPalette="teal" variant="subtle">
-                        Update <SlPencil />
+                <SimpleGrid columns={2} gap={2}>
+                    <Button size={'sm'} colorPalette="white" variant="subtle">
+                        View Player <SlUser />
                     </Button>
-                    <Button size={'sm'} colorPalette="teal" variant="subtle" onClick={(_id) => handleGiveCredits(_id)}>
+                    <Button size={'sm'} bg="orange.800" colorPalette="white" variant="subtle" onClick={(_id) => handleGiveCredits(_id)}>
+                        Edit Player <PiHandCoinsLight />
+                    </Button>
+                    <Button size={'sm'} bg="green.800" colorPalette="white" variant="subtle" onClick={(_id) => handleGiveCredits(_id)}>
                         Give Credits <PiHandCoinsLight />
                     </Button>
-                    <Button isLoading={isLoading} size={'sm'} colorPalette="teal" variant="subtle" onClick={(_id) => handleDeletePlayer(_id)}>
-                        Delete <CiTrash />
+                    <Button isLoading={isLoading} bg="red.500" size={'sm'} colorPalette="white" variant="subtle" onClick={(_id) => handleDeletePlayer(_id)}>
+                        Remove Player<CiTrash />
                     </Button>
-                </HStack>
+                </SimpleGrid>
             )}
         </VStack>
     )

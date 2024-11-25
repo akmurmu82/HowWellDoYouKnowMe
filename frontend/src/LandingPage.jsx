@@ -125,7 +125,7 @@ function LandingPage() {
                                         </Field> */}
                                         <Field label="Relation">
                                             <NativeSelectRoot variant={"subtle"}>
-                                                <NativeSelectField name="relation" items={["Sibling", "Friend", "Cousine", "Uncle", "Aunt", "Niece", "Nephew", "Unknown", "Admin"]} value={formData.relation} onChange={handleChange} />
+                                                <NativeSelectField name="relation" items={["Sibling", "Friend", "Cousine", "Uncle", "Aunt", "Niece", "Nephew", "Unknown"]} value={formData.relation} onChange={handleChange} />
                                             </NativeSelectRoot>
                                         </Field>
                                         <Field label="Email" value={formData.email} invalid={formSubmitted & !formData.email} errorText="Ab ye bhi daal hi do na..">
